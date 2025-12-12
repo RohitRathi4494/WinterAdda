@@ -1,0 +1,143 @@
+// Add item to cart (localStorage)
+function addToCart(name, price, image) {
+  let cart = JSON.parse(localStorage.getItem("wa_cart")) || [];
+
+  const existingIndex = cart.findIndex(item => item.name === name);
+  if (existingIndex !== -1) {
+    cart[existingIndex].qty += 1;
+  } else {
+    cart.push({ image, name, price, qty: 1 });
+  }
+
+  localStorage.setItem("wa_cart", JSON.stringify(cart));
+  alert(name + " added to cart");
+}
+
+
+// Load cart items on cart page
+function loadCart() {
+  const tableBody = document.getElementById("cart-body");
+  const totalEl = document.getElementById("cart-total");
+  const emptyMsg = document.getElementById("empty-cart-msg");
+
+  let cart = JSON.parse(localStorage.getItem("wa_cart")) || [];
+
+  if (!cart.length) {
+    emptyMsg.style.display = "block";
+    if (tableBody) tableBody.innerHTML = "";
+    if (totalEl) totalEl.textContent = "₹0";
+    return;
+  }
+
+  emptyMsg.style.display = "none";
+
+  let rows = "";
+  let total = 0;
+
+  cart.forEach((item, index) => {
+    const itemTotal = item.price * item.qty;
+    total += itemTotal;
+    rows += `
+      <tr>
+        <td><img src="${item.image}" class="cart-img" alt="${item.name}"></td>
+        <td>${item.name}</td>
+        <td>₹${item.price}</td>
+        <td>${item.qty}</td>
+        <td>₹${itemTotal}</td>
+        <td><button class="btn btn-outline" onclick="removeItem(${index})">Remove</button></td>
+      </tr>
+    `;
+  });
+
+  tableBody.innerHTML = rows;
+  totalEl.textContent = "₹" + total;
+}
+
+function removeItem(index) {
+  let cart = JSON.parse(localStorage.getItem("wa_cart")) || [];
+  cart.splice(index, 1);
+  localStorage.setItem("wa_cart", JSON.stringify(cart));
+  loadCart();
+}
+
+function clearCart() {
+  localStorage.removeItem("wa_cart");
+  loadCart();
+}
+function loadCheckoutSummary() {
+  let cart = JSON.parse(localStorage.getItem("wa_cart")) || [];
+  const itemsContainer = document.getElementById("checkout-items");
+  const subtotalEl = document.getElementById("checkout-subtotal");
+  const shippingEl = document.getElementById("checkout-shipping");
+  const totalEl = document.getElementById("checkout-total");
+
+  if (!cart.length) {
+    itemsContainer.innerHTML = "<p>Your cart is empty.</p>";
+    subtotalEl.textContent = "₹0";
+    shippingEl.textContent = "₹0";
+    totalEl.textContent = "₹0";
+    return;
+  }
+
+  let subtotal = 0;
+  let html = "";
+
+  cart.forEach(item => {
+    const itemTotal = item.price * item.qty;
+    subtotal += itemTotal;
+
+    html += `
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+        <span>${item.name} x ${item.qty}</span>
+        <span>₹${itemTotal}</span>
+      </div>
+    `;
+  });
+
+  const shipping = subtotal >= 5000 ? 0 : 199;
+  const total = subtotal + shipping;
+
+  itemsContainer.innerHTML = html;
+  subtotalEl.textContent = "₹" + subtotal;
+  shippingEl.textContent = "₹" + shipping;
+  totalEl.textContent = "₹" + total;
+}
+
+function proceedToCheckout() {
+  let cart = JSON.parse(localStorage.getItem("wa_cart")) || [];
+
+  // If cart is empty, prevent checkout
+  if (!cart.length) {
+    alert("Your cart is empty. Add items before checking out.");
+    return;
+  }
+
+  // Redirect to checkout page
+  window.location.href = "checkout.html";
+}
+function placeOrder() {
+  alert("✅ Order placed successfully!\nThank you for shopping with Winter Adda!");
+  localStorage.removeItem("wa_cart");
+  window.location.href = "index.html";
+}
+function filterProducts(category) {
+  const products = document.querySelectorAll(".product-card");
+  const buttons = document.querySelectorAll(".filter-btn");
+
+  // remove active state from all buttons
+  buttons.forEach(btn => btn.classList.remove("active"));
+
+  // add active to clicked button
+  event.target.classList.add("active");
+
+  products.forEach(product => {
+    const cat = product.getAttribute("data-category");
+
+    if (category === "all" || cat === category) {
+      product.style.display = "block";
+    } else {
+      product.style.display = "none";
+    }
+  });
+}
+

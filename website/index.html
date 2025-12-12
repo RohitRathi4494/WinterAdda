@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Winter Adda | Premium Winter Fashion</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Winter Adda - Premium winter jackets, hoodies, sweaters and thermal wear for stylish winters in India.">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Meta Pixel Code -->
+  <script>
+    !function (f, b, e, v, n, t, s) {
+      if (f.fbq) return; n = f.fbq = function () {
+        n.callMethod ?
+          n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+      };
+      if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+      n.queue = []; t = b.createElement(e); t.async = !0;
+      t.src = v; s = b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t, s)
+    }(window, document, 'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1357237699215052');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1357237699215052&ev=PageView&noscript=1" /></noscript>
+  <!-- End Meta Pixel Code -->
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LJQ91G8QES"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'G-LJQ91G8QES');
+</script>
+
+<body>
+  <header>
+    <div class="logo-area">
+      <img src="images/logo.png" alt="Winter Adda Logo">
+      <span>Winter Adda</span>
+    </div>
+    <nav>
+      <a href="index.html" class="active">Home</a>
+      <a href="products.html">Products</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="cart.html">Cart</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-slider">
+      <img src="images/slide_1.png" class="slide active">
+      <!--<img src="images/slide_2.png" class="slide">-->
+      <!--<img src="images/slide_3.png" class="slide">-->
+    </div>
+
+    <div class="hero-content">
+      <h1>Stay Warm<br>Stay Stylish</h1>
+      <p>Winter Adda is your cosy corner for premium winter fashion – jackets, hoodies, sweaters and more, curated for
+        Indian winters.</p>
+      <a href="products.html" class="btn">Shop Winter Collection</a>
+    </div>
+  </section>
+  <section class="shop-category">
+    <h2 class="section-title">Shop by Category</h2>
+    <p class="section-subtitle">Find your perfect winter wear in one click.</p>
+
+    <div class="category-buttons">
+
+      <a href="jackets.html" class="cat-btn">
+        Jackets
+      </a>
+
+      <a href="hoodies.html" class="cat-btn">
+        Hoodies
+      </a>
+
+      <a href="sweaters.html" class="cat-btn">
+        Sweaters
+      </a>
+
+      <a href="thermals.html" class="cat-btn">
+        Thermals
+      </a>
+
+      <a href="accessories.html" class="cat-btn">
+        Accessories
+      </a>
+
+      <a href="boots.html" class="cat-btn">
+        Winter Boots
+      </a>
+
+    </div>
+  </section>
+
+  <!-- Trending Women's Collection -->
+  <div class="container">
+    <h2 class="section-title">Trending This Season</h2>
+    <p class="section-subtitle">Handpicked styles loved by customers across India.</p>
+
+    <div class="products-grid">
+      <div class="product-card">
+        <img src="images/Women Blush Puffer Jacket.png" alt="Women's Blush Puffer Jacket">
+        <h3>Women's Blush Puffer Jacket</h3>
+        <p class="price">₹6,999</p>
+        <p>Warm, lightweight jacket with pastel finish.</p>
+        <button class="btn"
+          onclick="addToCart('Women Blush Puffer Jacket', 6999, 'images/Women Blush Puffer Jacket.png')">Add to
+          Cart</button>
+      </div>
+
+      <div class="product-card">
+        <img src="images/Soft Knit Sweater.png" alt="Soft Knit Sweater">
+        <h3>Soft Knit Sweater</h3>
+        <p class="price">₹5,499</p>
+        <p>Everyday sweater in a cosy knit pattern.</p>
+        <button class="btn" onclick="addToCart('Soft Knit Sweater', 5499, 'images/Soft Knit Sweater.png')">Add to
+          Cart</button>
+      </div>
+
+      <div class="product-card">
+        <img src="images/Oversized Hoodie.png" alt="Oversized Hoodie">
+        <h3>Oversized Hoodie</h3>
+        <p class="price">₹5,999</p>
+        <p>Relaxed-fit hoodie with warm fleece lining.</p>
+        <button class="btn" onclick="addToCart('Oversized Hoodie', 5999, 'images/Oversized Hoodie.png')">Add to
+          Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Featured Men's Collection -->
+  <div class="container">
+    <h2 class="section-title">Men's Winter Essentials</h2>
+    <p class="section-subtitle">Warm, rugged and stylish winter essentials for men.</p>
+
+    <div class="products-grid">
+      <div class="product-card">
+        <img src="images/Men Puffer Jacket.png" alt="Men's Puffer Jacket">
+        <h3>Men's Puffer Jacket</h3>
+        <p class="price">₹6,999</p>
+        <p>High-warmth padding with a modern winter look.</p>
+        <button class="btn" onclick="addToCart('Men\'s Puffer Jacket', 6999,'images/Men Puffer Jacket.png' )">Add to
+          Cart</button>
+      </div>
+
+      <div class="product-card">
+        <img src="images/Men Fleece Hoodie.png" alt="Men's Fleece Hoodie">
+        <h3>Men's Fleece Hoodie</h3>
+        <p class="price">₹6,999</p>
+        <p>Soft fleece interior for maximum warmth and comfort.</p>
+        <button class="btn" onclick="addToCart('Men\'s Fleece Hoodie', 6999, 'images/Men Fleece Hoodie.png')">Add to
+          Cart</button>
+      </div>
+
+      <div class="product-card">
+        <img src="images/Men Woolen Sweater.jpg" alt="Men's Woolen Sweater">
+        <h3>Men's Woolen Sweater</h3>
+        <p class="price">₹2,499</p>
+        <p>Classic wool sweater designed for Indian winter chills.</p>
+        <button class="btn" onclick="addToCart('Men\'s Woolen Sweater', 2499,'images/Men Woolen Sweater.jpg')">Add to
+          Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Why Choose Us Section -->
+  <div class="container why-choose">
+    <h2 class="section-title">Why Choose Winter Adda?</h2>
+
+    <div class="features-grid">
+
+      <div class="feature-card">
+        <span class="feature-icon">🚚</span>
+        <h4>Free Shipping</h4>
+        <p>Free delivery on orders above ₹5,000</p>
+      </div>
+
+      <div class="feature-card">
+        <span class="feature-icon">↩️</span>
+        <h4>Easy Returns</h4>
+        <p>7-day hassle-free return policy</p>
+      </div>
+
+      <div class="feature-card">
+        <span class="feature-icon">✨</span>
+        <h4>Premium Quality</h4>
+        <p>Handpicked fabrics for ultimate comfort</p>
+      </div>
+
+      <div class="feature-card">
+        <span class="feature-icon">💳</span>
+        <h4>Secure Payment</h4>
+        <p>100% secure payment gateway</p>
+      </div>
+
+    </div>
+  </div>
+
+
+  <footer>
+    © 2025 Winter Adda. All rights reserved.
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="auth.js"></script>
+  <script>
+    // Hero Slider
+    let slides = document.querySelectorAll('.slide');
+    let index = 0;
+
+    if (slides.length > 1) {
+      setInterval(() => {
+        slides[index].classList.remove('active');
+        index = (index + 1) % slides.length;
+        slides[index].classList.add('active');
+      }, 4000);
+    }
+  </script>
+</body>
+
+</html>

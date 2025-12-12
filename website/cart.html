@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Your Cart | Winter Adda</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="View and manage your Winter Adda cart.">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Meta Pixel Code -->
+  <script>
+    !function (f, b, e, v, n, t, s) {
+      if (f.fbq) return; n = f.fbq = function () {
+        n.callMethod ?
+        n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+      };
+      if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+      n.queue = []; t = b.createElement(e); t.async = !0;
+      t.src = v; s = b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t, s)
+    }(window, document, 'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1357237699215052');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1357237699215052&ev=PageView&noscript=1" /></noscript>
+  <!-- End Meta Pixel Code -->
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LJQ91G8QES"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'G-LJQ91G8QES');
+</script>
+
+<body onload="loadCart()">
+  <header>
+    <div class="logo-area">
+      <img src="images/logo.png" alt="Winter Adda Logo">
+      <span>Winter Adda</span>
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="cart.html" class="active">Cart</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h1 class="section-title">Your Cart</h1>
+
+    <div id="empty-cart-msg" style="text-align:center; padding:40px 20px; display:none;">
+      <p style="font-size:18px; margin-bottom:15px;">Your cart is empty.</p>
+      <p>Explore our <a href="products.html" style="color:#e74c3c; text-decoration:underline;">winter collection</a> and
+        find something you love!</p>
+    </div>
+
+    <div id="cart-content">
+      <table class="cart-table">
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Qty</th>
+            <th>Subtotal</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="cart-body">
+          <!-- JS will insert rows with product images dynamically -->
+        </tbody>
+      </table>
+
+      <div class="cart-summary">
+        <div class="summary-row">
+          <span>Subtotal:</span>
+          <span id="cart-subtotal">₹0</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping:</span>
+          <span id="cart-shipping">₹0</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total:</span>
+          <span id="cart-total">₹0</span>
+        </div>
+      </div>
+
+      <div class="cart-actions">
+        <a href="products.html" class="btn btn-outline">Continue Shopping</a>
+        <div>
+          <button class="btn btn-outline" onclick="clearCart()">Clear Cart</button>
+          <button class="btn" onclick="proceedToCheckout()">Proceed to Checkout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 Winter Adda. All rights reserved.
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="auth.js"></script>
+</body>

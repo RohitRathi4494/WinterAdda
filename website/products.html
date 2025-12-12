@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Shop | Winter Adda</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <header>
+    <div class="logo-area">
+      <img src="images/logo.png" alt="Winter Adda Logo">
+      <span>Winter Adda</span>
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="products.html" class="active">Products</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="cart.html">Cart</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h2 class="section-title">Winter Collection</h2>
+
+    <div class="category-filter">
+      <button class="filter-btn active" onclick="filterProducts('all', this)">All</button>
+      <button class="filter-btn" onclick="filterProducts('jackets', this)">Jackets</button>
+      <button class="filter-btn" onclick="filterProducts('hoodies', this)">Hoodies</button>
+      <button class="filter-btn" onclick="filterProducts('sweaters', this)">Sweaters</button>
+      <button class="filter-btn" onclick="filterProducts('thermals', this)">Thermals</button>
+      <button class="filter-btn" onclick="filterProducts('boots', this)">Boots</button>
+      <button class="filter-btn" onclick="filterProducts('accessories', this)">Accessories</button>
+    </div>
+
+    <div class="products-grid" id="products-grid">
+      <!-- Products will be loaded here dynamically -->
+      <p style="text-align:center; width:100%; grid-column: 1/-1;">Loading products...</p>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 Winter Adda. All rights reserved.
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="auth.js"></script>
+  <script>
+    // Load products on page load
+    async function loadShopProducts(category = 'all') {
+      const grid = document.getElementById('products-grid');
+      grid.innerHTML = '<p style="text-align:center; width:100%; grid-column: 1/-1;">Loading...</p>';
+
+      try {
+        // Construct URL
+        let url = `${API_URL.replace('/auth', '/products')}`;
+        if (category !== 'all') {
+          url += `?category=${category}`;
+        }
+
+        const res = await fetch(url);
+        const products = await res.json();
+
+        // Helper to resolve image URL
+        function getImageUrl(path) {
+          if (!path) return 'images/logo.png';
+          if (path.startsWith('http')) return path;
+          if (path.startsWith('uploads/') || path.includes('\\')) {
+            // Construct base URL from API_URL (remove /api/auth)
+            const baseUrl = API_URL.replace('/api/auth', '');
+            // Normalize slashes
+            return `${baseUrl}/${path.replace(/\\/g, '/')}`;
+          }
+          return path;
+        }
+
+        if (products.length === 0) {
+          grid.innerHTML = '<p style="text-align:center; width:100%; grid-column: 1/-1;">No products found in this category.</p>';
+          return;
+        }
+
+        grid.innerHTML = products.map(p => `
+                <div class="product-card">
+                  <img src="${getImageUrl(p.image)}" alt="${p.name}" onerror="this.src='images/logo.png'">
+                  <h3>${p.name}</h3>
+                  <p class="price">₹${p.price}</p>
+                  <p>${p.description || ''}</p>
+                  <button class="btn" onclick="addToCart('${p.name.replace(/'/g, "\\'")}', ${p.price}, '${getImageUrl(p.image).replaceAll('\\', '/')}')">Add to Cart</button>
+                </div>
+            `).join('');
+
+      } catch (err) {
+        console.error(err);
+        grid.innerHTML = '<p style="text-align:center; width:100%; grid-column: 1/-1; color:red">Error loading products. Ensure backend is running.</p>';
+      }
+    }
+
+    // Override the simpler local filterProducts from script.js with this API-based one
+    window.filterProducts = function (category, btn) {
+      // Update active button
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      // Fetch products
+      loadShopProducts(category);
+    };
+
+    // Initial load
+    // Check if URL has category param (e.g. from Home page links)
+    const urlParams = new URLSearchParams(window.location.search);
+    const catParam = urlParams.get('category') || 'all';
+
+    // Set active button
+    if (catParam !== 'all') {
+      // Try to find the button and activate it
+      // Note: simple implementation, might not match text exactly if case differs
+    }
+
+    loadShopProducts(catParam);
+  </script>
+</body>
+
+</html>
