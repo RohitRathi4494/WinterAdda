@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000/api/auth'; // Change this to deployed URL later
+const API_URL = 'https://winteradda.onrender.com/api/auth';
 
 // Handle Signup
 async function handleSignup(event) {
