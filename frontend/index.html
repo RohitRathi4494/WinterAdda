@@ -105,34 +105,9 @@
     <h2 class="section-title">Trending This Season</h2>
     <p class="section-subtitle">Handpicked styles loved by customers across India.</p>
 
-    <div class="products-grid">
-      <div class="product-card">
-        <img src="images/Women Blush Puffer Jacket.png" alt="Women's Blush Puffer Jacket">
-        <h3>Women's Blush Puffer Jacket</h3>
-        <p class="price">₹6,999</p>
-        <p>Warm, lightweight jacket with pastel finish.</p>
-        <button class="btn"
-          onclick="addToCart('Women Blush Puffer Jacket', 6999, 'images/Women Blush Puffer Jacket.png')">Add to
-          Cart</button>
-      </div>
-
-      <div class="product-card">
-        <img src="images/Soft Knit Sweater.png" alt="Soft Knit Sweater">
-        <h3>Soft Knit Sweater</h3>
-        <p class="price">₹5,499</p>
-        <p>Everyday sweater in a cosy knit pattern.</p>
-        <button class="btn" onclick="addToCart('Soft Knit Sweater', 5499, 'images/Soft Knit Sweater.png')">Add to
-          Cart</button>
-      </div>
-
-      <div class="product-card">
-        <img src="images/Oversized Hoodie.png" alt="Oversized Hoodie">
-        <h3>Oversized Hoodie</h3>
-        <p class="price">₹5,999</p>
-        <p>Relaxed-fit hoodie with warm fleece lining.</p>
-        <button class="btn" onclick="addToCart('Oversized Hoodie', 5999, 'images/Oversized Hoodie.png')">Add to
-          Cart</button>
-      </div>
+    <div class="products-grid" id="featured-products-grid">
+      <!-- Dynamic Featured Products will load here -->
+      <p style="text-align:center; width:100%; grid-column: 1/-1;">Loading featured collection...</p>
     </div>
   </div>
 
@@ -141,33 +116,8 @@
     <h2 class="section-title">Men's Winter Essentials</h2>
     <p class="section-subtitle">Warm, rugged and stylish winter essentials for men.</p>
 
-    <div class="products-grid">
-      <div class="product-card">
-        <img src="images/Men Puffer Jacket.png" alt="Men's Puffer Jacket">
-        <h3>Men's Puffer Jacket</h3>
-        <p class="price">₹6,999</p>
-        <p>High-warmth padding with a modern winter look.</p>
-        <button class="btn" onclick="addToCart('Men\'s Puffer Jacket', 6999,'images/Men Puffer Jacket.png' )">Add to
-          Cart</button>
-      </div>
-
-      <div class="product-card">
-        <img src="images/Men Fleece Hoodie.png" alt="Men's Fleece Hoodie">
-        <h3>Men's Fleece Hoodie</h3>
-        <p class="price">₹6,999</p>
-        <p>Soft fleece interior for maximum warmth and comfort.</p>
-        <button class="btn" onclick="addToCart('Men\'s Fleece Hoodie', 6999, 'images/Men Fleece Hoodie.png')">Add to
-          Cart</button>
-      </div>
-
-      <div class="product-card">
-        <img src="images/Men Woolen Sweater.jpg" alt="Men's Woolen Sweater">
-        <h3>Men's Woolen Sweater</h3>
-        <p class="price">₹2,499</p>
-        <p>Classic wool sweater designed for Indian winter chills.</p>
-        <button class="btn" onclick="addToCart('Men\'s Woolen Sweater', 2499,'images/Men Woolen Sweater.jpg')">Add to
-          Cart</button>
-      </div>
+    <div class="products-grid" id="men-essentials-grid">
+      <!-- Dynamic Men's Essentials can also load here or be merged -->
     </div>
   </div>
 
@@ -223,7 +173,47 @@
         slides[index].classList.add('active');
       }, 4000);
     }
-    
+
+    // Dynamic Featured Products
+    async function loadFeaturedProducts() {
+      const grid = document.getElementById('featured-products-grid');
+      try {
+        const res = await fetch(`${API_URL.replace('/auth', '/products')}?isFeatured=true`);
+        const products = await res.json();
+
+        // Helper to resolve image URL
+        function getImageUrl(path) {
+          if (!path) return 'images/logo.png';
+          if (path.startsWith('http')) return path;
+          if (path.startsWith('uploads/')) {
+            const baseUrl = API_URL.replace('/api/auth', '');
+            return `${baseUrl}/${path.replace(/\\/g, '/')}`;
+          }
+          return path;
+        }
+
+        if (products.length === 0) {
+          grid.innerHTML = '<p style="text-align:center; width:100%; grid-column: 1/-1;">Check back soon for our new featured collection!</p>';
+          return;
+        }
+
+        grid.innerHTML = products.map(p => `
+          <div class="product-card">
+            <img src="${getImageUrl(p.image)}" alt="${p.name}" onerror="this.src='images/logo.png'">
+            <h3>${p.name}</h3>
+            <p class="price">₹${p.price}</p>
+            <p>${p.description || ''}</p>
+            <button class="btn" onclick="addToCart('${p.name.replace(/'/g, "\\'")}', ${p.price}, '${getImageUrl(p.image).replaceAll('\\', '/')}')">Add to Cart</button>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.error('Error loading featured products:', err);
+        grid.innerHTML = '<p style="text-align:center; width:100%; grid-column: 1/-1;">Welcome to Winter Adda! Our collection is coming soon.</p>';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadFeaturedProducts);
+
   </script>
 </body>
 

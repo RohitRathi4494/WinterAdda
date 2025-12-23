@@ -41,10 +41,13 @@ const adminMiddleware = async (req, res, next) => {
 // GET /api/products - List all products (with optional query filters)
 router.get('/', async (req, res) => {
     try {
-        const { category } = req.query;
+        const { category, isFeatured } = req.query;
         let query = {};
         if (category && category !== 'all') {
             query.category = category;
+        }
+        if (isFeatured === 'true') {
+            query.isFeatured = true;
         }
         const products = await Product.find(query);
         // Ensure image URLs are full paths if stored locally
@@ -71,7 +74,7 @@ router.get('/', async (req, res) => {
 // Now supports multipart/form-data
 router.post('/', adminMiddleware, upload.single('image'), async (req, res) => {
     try {
-        const { name, price, description, category } = req.body;
+        const { name, price, description, category, isFeatured } = req.body;
         let image = req.body.image; // Fallback to URL if string provided
 
         if (req.file) {
@@ -88,7 +91,8 @@ router.post('/', adminMiddleware, upload.single('image'), async (req, res) => {
             price,
             description,
             category,
-            image
+            image,
+            isFeatured: isFeatured === 'true' || isFeatured === true
         });
 
         await newProduct.save();
