@@ -262,7 +262,8 @@
                 }
             } catch (err) {
                 console.error(err);
-                alert('Connection Error: Could not reach the server. Please check your internet or if the backend is running.');
+                const targetUrl = API_URL.replace('/auth', '/products');
+                alert(`Connection Error: Could not reach the server at ${targetUrl}. Please check if the backend is running or if the URL is correct.`);
             }
         }
 
@@ -290,7 +291,8 @@
                 }
             } catch (err) {
                 console.error(err);
-                alert('Connection Error: Could not reach the server.');
+                const targetUrl = `${API_URL.replace('/auth', '/products')}/${id}`;
+                alert(`Connection Error: Could not reach the server at ${targetUrl}.`);
             }
         }
 
