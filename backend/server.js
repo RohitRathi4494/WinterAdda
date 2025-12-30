@@ -40,8 +40,7 @@ app.use((err, req, res, next) => {
     console.error('SERVER ERROR:', err.stack);
     res.status(500).json({
         message: 'Internal Server Error',
-        error: err.message,
-        stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+        error: err.message || 'An unexpected error occurred'
     });
 });
 
