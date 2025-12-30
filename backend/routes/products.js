@@ -61,7 +61,8 @@ router.get('/', async (req, res) => {
         const products = await Product.find(query);
         res.json(products);
     } catch (error) {
-        res.status(500).json({ message: 'Error fetching products' });
+        console.error('Error fetching products:', error);
+        res.status(500).json({ message: 'Error fetching products', error: error.message });
     }
 });
 
@@ -89,6 +90,7 @@ router.post('/', adminMiddleware, upload.single('image'), async (req, res) => {
         await newProduct.save();
         res.status(201).json(newProduct);
     } catch (error) {
+        console.error('Error creating product:', error);
         res.status(400).json({ message: 'Error creating product', error: error.message });
     }
 });
@@ -99,7 +101,8 @@ router.delete('/:id', adminMiddleware, async (req, res) => {
         await Product.findByIdAndDelete(req.params.id);
         res.json({ message: 'Product deleted' });
     } catch (error) {
-        res.status(500).json({ message: 'Error deleting product' });
+        console.error('Error deleting product:', error);
+        res.status(500).json({ message: 'Error deleting product', error: error.message });
     }
 });
 
