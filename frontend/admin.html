@@ -273,7 +273,8 @@
             if (res.ok) {
                 loadProducts();
             } else {
-                alert('Error deleting');
+                const d = await res.json();
+                alert(d.message || d.error || 'Error deleting');
             }
         }
 
