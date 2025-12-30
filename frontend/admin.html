@@ -242,7 +242,6 @@
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`
-                        // Content-Type is NOT set manually when sending FormData, fetch sets it with boundary
                     },
                     body: formData
                 });
@@ -252,12 +251,17 @@
                     e.target.reset();
                     loadProducts();
                 } else {
-                    const d = await res.json();
-                    alert(d.message || 'Error adding product');
+                    const text = await res.text();
+                    try {
+                        const d = JSON.parse(text);
+                        alert(d.message || d.error || 'Error adding product');
+                    } catch (e) {
+                        alert(`Server Error (${res.status}): ${text.substring(0, 100)}...`);
+                    }
                 }
             } catch (err) {
                 console.error(err);
-                alert('Server error');
+                alert('Connection Error: Could not reach the server. Please check your internet or if the backend is running.');
             }
         }
 
@@ -265,16 +269,26 @@
             if (!confirm('Are you sure?')) return;
 
             const token = localStorage.getItem('token');
-            const res = await fetch(`${API_URL.replace('/auth', '/products')}/${id}`, {
-                method: 'DELETE',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
+            try {
+                const res = await fetch(`${API_URL.replace('/auth', '/products')}/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
 
-            if (res.ok) {
-                loadProducts();
-            } else {
-                const d = await res.json();
-                alert(d.message || d.error || 'Error deleting');
+                if (res.ok) {
+                    loadProducts();
+                } else {
+                    const text = await res.text();
+                    try {
+                        const d = JSON.parse(text);
+                        alert(d.message || d.error || 'Error deleting');
+                    } catch (e) {
+                        alert(`Server Error (${res.status}): ${text.substring(0, 100)}...`);
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Connection Error: Could not reach the server.');
             }
         }
 
