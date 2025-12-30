@@ -35,6 +35,16 @@ app.get('/', (req, res) => {
     res.send('Winter Adda Backend is running');
 });
 
+// Global Error Handler
+app.use((err, req, res, next) => {
+    console.error('SERVER ERROR:', err.stack);
+    res.status(500).json({
+        message: 'Internal Server Error',
+        error: err.message,
+        stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
