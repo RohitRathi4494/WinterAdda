@@ -6,16 +6,23 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your_super_secret_key';
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
-// Configure Multer Storage
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/');
+// Configure Cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+// Configure Cloudinary Storage
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'winter_adda_products',
+        allowed_formats: ['jpg', 'png', 'jpeg', 'webp'],
     },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname)); // Append extension
-    }
 });
 
 const upload = multer({ storage: storage });
@@ -50,21 +57,7 @@ router.get('/', async (req, res) => {
             query.isFeatured = true;
         }
         const products = await Product.find(query);
-        // Ensure image URLs are full paths if stored locally
-        const productsWithFullPath = products.map(p => {
-            let pObj = p.toObject();
-            if (pObj.image && !pObj.image.startsWith('http')) {
-                // Assuming server is running on same host, but frontend might differ. 
-                // Ideally, store relative path and let frontend prepend API_URL base, 
-                // or ensure server returns absolute URL. 
-                // For simplicty here, we return the relative path stored in DB (e.g. uploads/123.jpg)
-                // and Frontend should handle prepending server URL if needed.
-                // Actually, let's prepend the current default server URL for ease, or leave as relative.
-                // Let's leave as relative "uploads/filename.jpg" and let frontend handle it.
-            }
-            return pObj;
-        });
-        res.json(productsWithFullPath);
+        res.json(products);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching products' });
     }
@@ -78,12 +71,8 @@ router.post('/', adminMiddleware, upload.single('image'), async (req, res) => {
         let image = req.body.image; // Fallback to URL if string provided
 
         if (req.file) {
-            // If file uploaded, use the file path
-            // Windows path might use backslashes, normalize to forward slashes for URL
-            image = req.file.path.replace(/\\/g, '/');
-            // We want path relative to root? req.file.path gives "uploads\filename.jpg"
-            // If server serves /uploads, we want "uploads/filename.jpg" or "https://url/uploads/filename.jpg"
-            // Let's store "uploads/filename.jpg"
+            // Cloudinary storage provides the full URL in path
+            image = req.file.path;
         }
 
         const newProduct = new Product({

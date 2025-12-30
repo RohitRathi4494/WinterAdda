@@ -70,9 +70,7 @@
           if (!path) return 'images/logo.png';
           if (path.startsWith('http')) return path;
           if (path.startsWith('uploads/') || path.includes('\\')) {
-            // Construct base URL from API_URL (remove /api/auth)
             const baseUrl = API_URL.replace('/api/auth', '');
-            // Normalize slashes
             return `${baseUrl}/${path.replace(/\\/g, '/')}`;
           }
           return path;

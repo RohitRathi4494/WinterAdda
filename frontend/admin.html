@@ -165,9 +165,8 @@
             if (!path) return 'images/logo.png';
             if (path.startsWith('http')) return path;
             if (path.startsWith('uploads/')) {
-                // Construct base URL from API_URL (remove /api/auth)
                 const baseUrl = API_URL.replace('/api/auth', '');
-                return `${baseUrl}/${path.replace('\\', '/')}`;
+                return `${baseUrl}/${path.replace(/\\/g, '/')}`;
             }
             return path;
         }
