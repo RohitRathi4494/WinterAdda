@@ -254,7 +254,8 @@
                     const text = await res.text();
                     try {
                         const d = JSON.parse(text);
-                        alert(d.message || d.error || 'Error adding product');
+                        const msg = d.message && d.error ? `${d.message}: ${d.error}` : (d.message || d.error || 'Error adding product');
+                        alert(msg);
                     } catch (e) {
                         alert(`Server Error (${res.status}): ${text.substring(0, 100)}...`);
                     }
@@ -281,7 +282,8 @@
                     const text = await res.text();
                     try {
                         const d = JSON.parse(text);
-                        alert(d.message || d.error || 'Error deleting');
+                        const msg = d.message && d.error ? `${d.message}: ${d.error}` : (d.message || d.error || 'Error deleting');
+                        alert(msg);
                     } catch (e) {
                         alert(`Server Error (${res.status}): ${text.substring(0, 100)}...`);
                     }

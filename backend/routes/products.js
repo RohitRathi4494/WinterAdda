@@ -12,6 +12,10 @@ const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const JWT_SECRET = process.env.JWT_SECRET || 'your_super_secret_key';
 
 // Configure Cloudinary
+if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+    console.warn('WARNING: Cloudinary credentials missing in environment variables');
+}
+
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
