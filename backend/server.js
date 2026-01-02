@@ -1,8 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/auth');
-require('dotenv').config();
 
 console.log('--- Server Starting ---');
 console.log('Cloudinary Name:', process.env.CLOUDINARY_CLOUD_NAME ? 'SET' : 'MISSING');
