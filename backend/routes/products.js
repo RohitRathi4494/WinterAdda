@@ -72,7 +72,21 @@ router.get('/', async (req, res) => {
 
 // POST /api/products - Add a new product (Admin only)
 // Now supports multipart/form-data
-router.post('/', adminMiddleware, upload.single('image'), async (req, res) => {
+router.post('/', adminMiddleware, (req, res, next) => {
+    upload.single('image')(req, res, (err) => {
+        if (err) {
+            console.error('Upload Error:', err);
+            if (err.message === 'An unknown file format not allowed') {
+                return res.status(400).json({ message: 'Invalid file format. Allowed: jpg, png, jpeg, webp' });
+            }
+            if (err.code === 'LIMIT_FILE_SIZE') {
+                return res.status(400).json({ message: 'File too large. Max size is 10MB.' }); // Multer default/Cloudinary limit
+            }
+            return res.status(400).json({ message: 'Error uploading image', error: err.message });
+        }
+        next();
+    });
+}, async (req, res) => {
     try {
         const { name, price, description, category, isFeatured } = req.body;
         let image = req.body.image; // Fallback to URL if string provided
