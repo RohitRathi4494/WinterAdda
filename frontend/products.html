@@ -86,8 +86,10 @@
 
         grid.innerHTML = products.map(p => `
                 <div class="product-card">
-                  <img src="${getImageUrl(p.image)}" alt="${p.name}" onerror="this.src='images/logo.png'">
-                  <h3>${p.name}</h3>
+                  <a href="product-detail.html?id=${p._id}" style="text-decoration:none; color:inherit;">
+                    <img src="${getImageUrl(p.image)}" alt="${p.name}" onerror="this.src='images/logo.png'">
+                    <h3>${p.name}</h3>
+                  </a>
                   <p class="price">₹${p.price}</p>
                   <p>${p.description || ''}</p>
                   <button class="btn" onclick="addToCart('${p.name.replace(/'/g, "\\'")}', ${p.price}, '${getImageUrl(p.image).replaceAll('\\', '/')}')">Add to Cart</button>

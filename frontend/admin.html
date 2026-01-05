@@ -130,6 +130,22 @@
                             <option value="accessories">Accessories</option>
                         </select>
                     </div>
+
+                    <div class="form-group">
+                        <label>Sizes (Select available)</label>
+                        <div style="display: flex; gap: 15px; margin-top: 5px;">
+                            <label><input type="checkbox" name="size" value="S"> S</label>
+                            <label><input type="checkbox" name="size" value="M"> M</label>
+                            <label><input type="checkbox" name="size" value="L"> L</label>
+                            <label><input type="checkbox" name="size" value="XL"> XL</label>
+                            <label><input type="checkbox" name="size" value="XXL"> XXL</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Colors (Comma separated, e.g. Black, Red, Navy)</label>
+                        <input type="text" id="p-colors" placeholder="Black, Blue, Red">
+                    </div>
                     <div class="form-group">
                         <label>Image</label>
                         <!-- CHANGED: File input instead of text -->
@@ -211,29 +227,34 @@
             const name = document.getElementById('p-name').value;
             const price = document.getElementById('p-price').value;
             const category = document.getElementById('p-category').value;
-            const desc = document.getElementById('p-desc').value;
+            const description = document.getElementById('p-desc').value;
             const isFeatured = document.getElementById('p-featured').checked;
-            const fileInput = document.getElementById('p-image-file');
+            const imageFile = document.getElementById('p-image-file').files[0];
+            const colorsInput = document.getElementById('p-colors').value;
+
+            // Collect selected sizes
+            const selectedSizes = Array.from(document.querySelectorAll('input[name="size"]:checked'))
+                .map(cb => cb.value);
+
+            if (!name || !price || !imageFile) {
+                alert('Please fill required fields (Name, Price, Image)');
+                return;
+            }
 
             const formData = new FormData();
             formData.append('name', name);
             formData.append('price', price);
             formData.append('category', category);
-            formData.append('description', desc);
+            formData.append('description', description);
             formData.append('isFeatured', isFeatured);
+            formData.append('image', imageFile);
 
-            if (fileInput.files.length > 0) {
-                formData.append('image', fileInput.files[0]);
-            } else {
-                // If we enabled URL fallback
-                const urlInput = document.getElementById('p-image-url');
-                if (urlInput && urlInput.value) {
-                    formData.append('image', urlInput.value);
-                } else {
-                    alert('Please select an image file');
-                    return;
-                }
-            }
+            // Send arrays as JSON strings
+            formData.append('sizes', JSON.stringify(selectedSizes));
+
+            // Clean and split colors
+            const colorsArray = colorsInput.split(',').map(c => c.trim()).filter(c => c !== "");
+            formData.append('colors', JSON.stringify(colorsArray));
 
             const token = localStorage.getItem('token');
 

@@ -20,6 +20,12 @@ const productSchema = new mongoose.Schema({
         type: String, // URL to image
         required: true
     },
+    colors: {
+        type: [String]
+    },
+    sizes: {
+        type: [String]
+    },
     inStock: {
         type: Boolean,
         default: true

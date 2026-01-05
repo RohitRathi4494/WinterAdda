@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Product Details | Winter Adda</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Myntra-like Styles Override */
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: #fff;
+            color: #282c3f;
+        }
+
+        /* Navbar tweaks */
+        header {
+            box-shadow: 0 4px 12px 0 rgba(0, 0, 0, .05);
+            border-bottom: none;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: #fff;
+        }
+
+        .pdp-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: 58% 42%;
+            /* Image heavy left side */
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        /* Left Side: Images */
+        .image-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .image-grid img {
+            width: 100%;
+            cursor: zoom-in;
+            transition: transform .2s;
+        }
+
+        .image-grid .main-image {
+            grid-column: 1 / -1;
+        }
+
+        /* Right Side: Details */
+        .product-details {
+            padding: 0 10px 0 30px;
+        }
+
+        .pdp-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1;
+        }
+
+        .pdp-name {
+            font-size: 20px;
+            opacity: .8;
+            font-weight: 400;
+            margin-top: 5px;
+            display: block;
+            color: #535766;
+        }
+
+        .pdp-price-container {
+            margin: 15px 0 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eaeaec;
+        }
+
+        .pdp-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: #282c3f;
+        }
+
+        .pdp-mrp {
+            font-size: 20px;
+            text-decoration: line-through;
+            color: #94969f;
+            margin-left: 10px;
+            font-weight: 400;
+        }
+
+        .pdp-discount {
+            color: #ff905a;
+            font-size: 20px;
+            font-weight: 700;
+            margin-left: 10px;
+        }
+
+        .pdp-tax-note {
+            color: #03a685;
+            font-weight: 700;
+            font-size: 14px;
+            display: block;
+            margin-top: 5px;
+        }
+
+        /* Selectors */
+        .size-selector {
+            margin-bottom: 25px;
+        }
+
+        .size-header {
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .size-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .size-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 1px solid #bfc0c6;
+            background: #fff;
+            color: #282c3f;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .size-btn:hover {
+            border-color: #ff3e6c;
+        }
+
+        .size-btn.selected {
+            border-color: #ff3e6c;
+            color: #ff3e6c;
+            /* box-shadow: inset 0 0 0 1px #ff3e6c; */
+        }
+
+        .color-selector {
+            margin-bottom: 25px;
+        }
+
+        .color-btn {
+            display: inline-block;
+            padding: 5px 15px;
+            border: 1px solid #eaeaec;
+            border-radius: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .color-btn.selected {
+            border-color: #ff3e6c;
+            color: #ff3e6c;
+            font-weight: bold;
+        }
+
+        /* Actions */
+        .pdp-actions {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #eaeaec;
+        }
+
+        .btn-bag {
+            flex: 2;
+            background-color: #ff3e6c;
+            color: #fff;
+            border: none;
+            padding: 15px 0;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 4px;
+            text-transform: uppercase;
+            cursor: pointer;
+            letter-spacing: 1px;
+        }
+
+        .btn-bag:hover {
+            background-color: #f13565;
+        }
+
+        .btn-wishlist {
+            flex: 1;
+            background-color: #fff;
+            color: #282c3f;
+            border: 1px solid #d4d5d9;
+            padding: 15px 0;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 4px;
+            text-transform: uppercase;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-wishlist:hover {
+            border-color: #282c3f;
+        }
+
+        /* Accordion / Details */
+        .product-spec {
+            margin-top: 20px;
+        }
+
+        .spec-title {
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .spec-content {
+            font-size: 16px;
+            color: #282c3f;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .pdp-container {
+                grid-template-columns: 1fr;
+                padding: 0;
+                margin-top: 0;
+            }
+
+            .product-details {
+                padding: 20px;
+            }
+
+            .image-grid {
+                grid-template-columns: 1fr;
+                /* Stack images on mobile */
+            }
+
+            .pdp-actions {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: white;
+                padding: 10px 15px;
+                margin: 0;
+                box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+                z-index: 100;
+            }
+
+            body {
+                padding-bottom: 80px;
+                /* Space for fixed buttons */
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo-area">
+            <img src="images/logo.png" alt="Winter Adda Logo">
+            <span>Winter Adda</span>
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="products.html" class="active">Products</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+            <a href="cart.html">Cart</a>
+        </nav>
+    </header>
+
+    <div class="pdp-container" id="product-listing">
+        <p style="text-align:center; width:100%; margin-top:50px;">Loading product details...</p>
+    </div>
+
+    <!-- No Footer on PDP usually to keep focus, or minimal footer -->
+    <footer style="margin-top: 50px;">
+        © 2025 Winter Adda. All rights reserved.
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="auth.js"></script>
+    <script src="product-detail.js"></script>
+</body>
+
+</html>

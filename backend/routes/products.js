@@ -88,12 +88,29 @@ router.post('/', adminMiddleware, (req, res, next) => {
     });
 }, async (req, res) => {
     try {
-        const { name, price, description, category, isFeatured } = req.body;
+        const { name, price, description, category, isFeatured, colors, sizes } = req.body;
         let image = req.body.image; // Fallback to URL if string provided
 
         if (req.file) {
             // Cloudinary storage provides the full URL in path
             image = req.file.path;
+        }
+
+        // Parse colors and sizes (handle potential string inputs from FormData)
+        let parsedColors = [];
+        let parsedSizes = [];
+
+        try {
+            if (colors) parsedColors = typeof colors === 'string' ? JSON.parse(colors) : colors;
+        } catch (e) {
+            // If JSON parse fails, assume comma-separated string
+            if (typeof colors === 'string') parsedColors = colors.split(',').map(c => c.trim());
+        }
+
+        try {
+            if (sizes) parsedSizes = typeof sizes === 'string' ? JSON.parse(sizes) : sizes;
+        } catch (e) {
+            if (typeof sizes === 'string') parsedSizes = sizes.split(',').map(s => s.trim());
         }
 
         const newProduct = new Product({
@@ -102,6 +119,8 @@ router.post('/', adminMiddleware, (req, res, next) => {
             description,
             category,
             image,
+            colors: parsedColors,
+            sizes: parsedSizes,
             isFeatured: isFeatured === 'true' || isFeatured === true
         });
 
@@ -110,6 +129,20 @@ router.post('/', adminMiddleware, (req, res, next) => {
     } catch (error) {
         console.error('Error creating product:', error);
         res.status(400).json({ message: 'Error creating product', error: error.message });
+    }
+});
+
+// GET /api/products/:id - Get a single product by ID
+router.get('/:id', async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+        res.json(product);
+    } catch (error) {
+        console.error('Error fetching product:', error);
+        res.status(500).json({ message: 'Error fetching product', error: error.message });
     }
 });
 
