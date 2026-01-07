@@ -23,6 +23,7 @@
       <a href="products.html" class="active">Products</a>
       <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
+      <a href="wishlist.html">Wishlist</a>
       <a href="cart.html">Cart</a>
     </nav>
   </header>
@@ -92,7 +93,7 @@
                   </a>
                   <p class="price">₹${p.price}</p>
                   <div style="margin-top: auto;">
-                    <button class="btn-wishlist" onclick="alert('Added to Wishlist!')">♡ Wishlist</button>
+                    <button class="btn-wishlist" onclick="addToWishlist('${p.name.replace(/'/g, "\\'")}', ${p.price}, '${getImageUrl(p.image).replaceAll('\\', '/')}')">♡ Wishlist</button>
                   </div>
                 </div>
             `).join('');

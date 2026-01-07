@@ -9,8 +9,53 @@ function addToCart(name, price, image) {
     cart.push({ image, name, price, qty: 1 });
   }
 
-  localStorage.setItem("wa_cart", JSON.stringify(cart));
-  alert(name + " added to cart");
+  localStorage.setItem('cart', JSON.stringify(cart));
+  updateCartDisplay();  // This is called on cart.html
+}
+
+// ===== WISHLIST FUNCTIONS =====
+function addToWishlist(name, price, image) {
+  let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+  // Check if item already in wishlist
+  const existingItem = wishlist.find(item => item.name === name);
+
+  if (existingItem) {
+    alert('This item is already in your wishlist!');
+    return;
+  }
+
+  // Add new item
+  wishlist.push({ name, price, image });
+  localStorage.setItem('wishlist', JSON.stringify(wishlist));
+  alert('Added to Wishlist!');
+}
+
+function removeFromWishlist(name) {
+  let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+  wishlist = wishlist.filter(item => item.name !== name);
+  localStorage.setItem('wishlist', JSON.stringify(wishlist));
+
+  // Reload wishlist display if on wishlist page
+  if (typeof loadWishlist === 'function') {
+    loadWishlist();
+  }
+}
+
+function getWishlist() {
+  return JSON.parse(localStorage.getItem('wishlist')) || [];
+}
+
+function moveToCart(name) {
+  let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+  const item = wishlist.find(i => i.name === name);
+
+  if (item) {
+    // Add to cart
+    addToCart(item.name, item.price, item.image);
+    // Remove from wishlist
+    removeFromWishlist(name);
+  }
 }
 
 

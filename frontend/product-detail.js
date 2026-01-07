@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <button class="btn-bag" onclick="addToCart('${p.name.replace(/'/g, "\\'")}', ${p.price}, '${getImageUrl(images[0]).replaceAll('\\', '/')}')">
                         <span style="margin-right:8px">🛍️</span> ADD TO BAG
                     </button>
-                    <button class="btn-wishlist">
+                    <button class="btn-wishlist" onclick="addToWishlist('${p.name.replace(/'/g, "\\'")}', ${p.price}, '${getImageUrl(images[0]).replaceAll('\\', '/')}')">
                         <span>♡</span> WISHLIST
                     </button>
                 </div>

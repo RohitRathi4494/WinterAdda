@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Your Wishlist | Winter Adda</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="View and manage your Winter Adda wishlist.">
+    <link rel="stylesheet" href="styles.css">
+    <!--Mail chimp -->
+    <script
+        id="mcjs">!function (c, h, i, m, p) { m = c.createElement(h), p = c.getElementsByTagName(h)[0], m.async = 1, m.src = i, p.parentNode.insertBefore(m, p) }(document, "script", "https://chimpstatic.com/mcjs-connected/js/users/c8e400b9ede436893def17f12/6795fe29f8bec48e6a2650739.js");</script>
+</head>
+
+<body onload="loadWishlist()">
+    <header>
+        <div class="logo-area">
+            <img src="images/logo.png" alt="Winter Adda Logo">
+            <span>Winter Adda</span>
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="products.html">Products</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+            <a href="wishlist.html" class="active">Wishlist</a>
+            <a href="cart.html">Cart</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1 class="section-title">Your Wishlist</h1>
+
+        <div id="empty-wishlist-msg" style="text-align:center; padding:40px 20px; display:none;">
+            <p style="font-size:18px; margin-bottom:15px;">Your wishlist is empty.</p>
+            <p>Explore our <a href="products.html" style="color:#e74c3c; text-decoration:underline;">winter
+                    collection</a> and
+                save items you love!</p>
+        </div>
+
+        <div id="wishlist-content">
+            <div class="products-grid" id="wishlist-grid">
+                <!-- JS will insert product cards here -->
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        © 2025 Winter Adda. All rights reserved.
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        function loadWishlist() {
+            const grid = document.getElementById('wishlist-grid');
+            const emptyMsg = document.getElementById('empty-wishlist-msg');
+            const content = document.getElementById('wishlist-content');
+
+            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+            if (!wishlist.length) {
+                emptyMsg.style.display = 'block';
+                content.style.display = 'none';
+                return;
+            }
+
+            emptyMsg.style.display = 'none';
+            content.style.display = 'block';
+
+            grid.innerHTML = wishlist.map(item => `
+        <div class="product-card">
+          <img src="${item.image}" alt="${item.name}" onerror="this.src='images/logo.png'">
+          <h3>${item.name}</h3>
+          <p class="price">₹${item.price}</p>
+          <div style="margin-top: auto; display: flex; flex-direction: column; gap: 8px;">
+            <button class="btn" onclick="moveToCart('${item.name.replace(/'/g, "\\'")}')">Add to Cart</button>
+            <button class="btn-delete" onclick="removeFromWishlist('${item.name.replace(/'/g, "\\'")}')">Remove</button>
+          </div>
+        </div>
+      `).join('');
+        }
+    </script>
+</body>
+
+</html>
