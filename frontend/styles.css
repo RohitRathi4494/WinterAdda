@@ -14,7 +14,7 @@ body {
 /* HEADER / NAVBAR */
 header {
   background: #ffffff;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.07);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.07);
   padding: 10px 40px;
   display: flex;
   align-items: center;
@@ -31,7 +31,8 @@ header {
 }
 
 .logo-area img {
-  height: 80px; /* Increased logo size */
+  height: 80px;
+  /* Increased logo size */
 }
 
 .logo-area span {
@@ -119,7 +120,7 @@ nav a:hover {
 .product-card {
   background: #ffffff;
   border-radius: 15px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   padding: 15px;
   text-align: center;
   /* Flex layout for bottom alignment */
@@ -130,8 +131,10 @@ nav a:hover {
 
 .product-card img {
   width: 100%;
-  height: 300px; /* Fixed height for uniformity */
-  object-fit: cover; /* or contain, depending on preference. Cover fills the box. */
+  height: 300px;
+  /* Fixed height for uniformity */
+  object-fit: cover;
+  /* or contain, depending on preference. Cover fills the box. */
   object-position: center;
   border-radius: 12px;
   margin-bottom: 10px;
@@ -140,7 +143,13 @@ nav a:hover {
 .product-card h3 {
   font-size: 16px;
   margin-bottom: 5px;
-  /* Optional: limit title lines if needed */
+  /* Fixed height for alignment (approx 2 lines) */
+  height: 40px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .product-card p {
@@ -154,7 +163,7 @@ nav a:hover {
 }
 
 /* Push the last div (buttons) to the bottom */
-.product-card > div:last-child {
+.product-card>div:last-child {
   margin-top: auto;
 }
 
@@ -183,7 +192,7 @@ nav a:hover {
   background: #fff;
   padding: 18px 20px;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   margin-top: 15px;
 }
 
@@ -222,13 +231,13 @@ nav a:hover {
   background: #fff;
   padding: 22px 18px;
   border-radius: 15px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .value-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
 }
 
 .value-card span {
@@ -255,9 +264,11 @@ nav a:hover {
     grid-template-columns: 1fr;
     text-align: center;
   }
+
   .about-text h1 {
     text-align: center;
   }
+
   .values-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -281,7 +292,7 @@ nav a:hover {
   background: #fff;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .contact-form label {
@@ -329,6 +340,7 @@ footer {
   text-align: center;
   font-size: 13px;
 }
+
 /* HERO SECTION */
 .hero {
   position: relative;
@@ -352,7 +364,8 @@ footer {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: right top; /* shows the girl on the right side */
+  object-position: right top;
+  /* shows the girl on the right side */
   position: absolute;
   top: 0;
   left: 0;
@@ -373,7 +386,8 @@ footer {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.35); /* soft black overlay */
+  background: rgba(0, 0, 0, 0.35);
+  /* soft black overlay */
   z-index: 1;
 }
 
@@ -382,7 +396,8 @@ footer {
   position: relative;
   z-index: 2;
   max-width: 550px;
-  text-align: left;   /* move text to left */
+  text-align: left;
+  /* move text to left */
 }
 
 .hero-content h1 {
@@ -421,15 +436,18 @@ footer {
   }
 
   .logo-area img {
-    height: 140px; /* Slightly smaller on mobile for better fit */
+    height: 140px;
+    /* Slightly smaller on mobile for better fit */
   }
 }
+
 .cart-img {
   width: 60px;
   height: 60px;
   object-fit: cover;
   border-radius: 8px;
 }
+
 /* WHY CHOOSE SECTION */
 .why-choose {
   text-align: center;
@@ -447,13 +465,13 @@ footer {
   background: #fff;
   padding: 25px 20px;
   border-radius: 15px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .feature-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
 }
 
 .feature-icon {
@@ -486,6 +504,7 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
 /* CHECKOUT */
 .checkout-grid {
   display: grid;
@@ -497,7 +516,7 @@ footer {
   background: #fff;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .checkout-box h3 {
@@ -538,6 +557,7 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
 .category-filter {
   text-align: center;
   margin-bottom: 25px;
