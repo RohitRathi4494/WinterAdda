@@ -50,9 +50,13 @@
 
         .main-image img {
             width: 100%;
-            height: auto;
-            max-height: 600px;
-            object-fit: cover;
+            height: 600px;
+            /* Fixed height for consistent sizing */
+            object-fit: contain;
+            /* Contain to show full product without cropping */
+            object-position: center;
+            background-color: #f8f8f8;
+            /* Light background for images with transparency */
             cursor: zoom-in;
         }
 
