@@ -29,30 +29,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         const mrp = Math.round(p.price * 1.4);
         const discount = Math.round(((mrp - p.price) / mrp) * 100);
 
-        container.innerHTML = `
-            // Handle Images
-            let images = p.images && p.images.length > 0 ? p.images : [p.image];
-            
-            // Generate Thumbnails HTML
-            const thumbnailsHtml = images.length > 1 ? `
-            < div class="thumbnail-strip" >
-                ${
-                    images.map((img, index) => `
-                        <img src="${getImageUrl(img)}" 
-                             class="thumbnail ${index === 0 ? 'active' : ''}" 
-                             onclick="changeImage('${getImageUrl(img).replace(/'/g, "\\'")}', this)">
-                    `).join('')
-        }
-                </div >
-            ` : '';
+        // Handle Images - MOVED OUTSIDE template literal
+        let images = p.images && p.images.length > 0 ? p.images : [p.image];
 
-            container.innerHTML = `
-            < div class="image-gallery" >
+        // Generate Thumbnails HTML
+        const thumbnailsHtml = images.length > 1 ? `
+            <div class="thumbnail-strip">
+                ${images.map((img, index) => `
+                    <img src="${getImageUrl(img)}" 
+                         class="thumbnail ${index === 0 ? 'active' : ''}" 
+                         onclick="changeImage('${getImageUrl(img).replace(/'/g, "\\'")}', this)">
+                `).join('')}
+            </div>
+        ` : '';
+
+        container.innerHTML = `
+            <div class="image-gallery">
                 <div class="main-image">
                     <img id="main-img" src="${getImageUrl(images[0])}" alt="${p.name}" onerror="this.src='images/logo.png'">
                 </div>
-                ${ thumbnailsHtml }
-            </div >
+                ${thumbnailsHtml}
+            </div>
 
             <div class="product-details">
                 <h1 class="pdp-title">${p.name}</h1>
@@ -86,7 +83,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>` : ''}
 
                 <div class="pdp-actions">
-                    <button class="btn-bag" onclick="addToCart('${p.name.replace(/'/g, "\\'")}', ${p.price}, '${getImageUrl(p.image).replaceAll('\\', '/')}')">
+                    <button class="btn-bag" onclick="addToCart('${p.name.replace(/'/g, "\\'")}', ${p.price}, '${getImageUrl(images[0]).replaceAll('\\', '/')}')">
                         <span style="margin-right:8px">🛍️</span> ADD TO BAG
                     </button>
                     <button class="btn-wishlist">
@@ -100,8 +97,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                         ${p.description || 'No additional details available.'}
                     </div>
                 </div>
-            </div >
-            `;
+            </div>
+        `;
 
         // Add event listeners for size selection
         document.querySelectorAll('.size-btn').forEach(btn => {
@@ -130,10 +127,16 @@ function renderSizes(sizes) {
         // Fallback or empty
         return '<span style="color:#666">One Size</span>';
     }
-    return sizes.map(s => `< button class="size-btn" > ${ s }</button > `).join('');
+    return sizes.map(s => `<button class="size-btn">${s}</button>`).join('');
 }
 
 function renderColors(colors) {
     if (!colors) return '';
-    return colors.map(c => `< span class="color-btn" > ${ c }</span > `).join('');
+    return colors.map(c => `<span class="color-btn">${c}</span>`).join('');
+}
+
+function changeImage(src, thumbnail) {
+    document.getElementById('main-img').src = src;
+    document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+    thumbnail.classList.add('active');
 }
