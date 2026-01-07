@@ -73,14 +73,17 @@ router.get('/', async (req, res) => {
 // POST /api/products - Add a new product (Admin only)
 // Now supports multipart/form-data
 router.post('/', adminMiddleware, (req, res, next) => {
-    upload.single('image')(req, res, (err) => {
+    upload.array('images', 4)(req, res, (err) => { // Modified for multiple files
         if (err) {
             console.error('Upload Error:', err);
             if (err.message === 'An unknown file format not allowed') {
                 return res.status(400).json({ message: 'Invalid file format. Allowed: jpg, png, jpeg, webp' });
             }
             if (err.code === 'LIMIT_FILE_SIZE') {
-                return res.status(400).json({ message: 'File too large. Max size is 10MB.' }); // Multer default/Cloudinary limit
+                return res.status(400).json({ message: 'File too large. Max size is 10MB.' });
+            }
+            if (err.code === 'LIMIT_UNEXPECTED_FILE') {
+                return res.status(400).json({ message: 'Too many files. Max 4 images allowed.' });
             }
             return res.status(400).json({ message: 'Error uploading image', error: err.message });
         }
@@ -89,12 +92,26 @@ router.post('/', adminMiddleware, (req, res, next) => {
 }, async (req, res) => {
     try {
         const { name, price, description, category, isFeatured, colors, sizes } = req.body;
-        let image = req.body.image; // Fallback to URL if string provided
 
-        if (req.file) {
-            // Cloudinary storage provides the full URL in path
-            image = req.file.path;
+        // Handle Images
+        let image = req.body.image; // Fallback string
+        let images = [];
+
+        if (req.files && req.files.length > 0) {
+            // New uploads present
+            req.files.forEach(file => {
+                images.push(file.path);
+            });
+            image = images[0]; // Set primary image to first uploaded
+        } else if (typeof req.body.images === 'string') {
+            // Handle case where images might be passed as JSON string (unlikely for file upload, but good safety)
+            try {
+                images = JSON.parse(req.body.images);
+            } catch (e) { images = [req.body.images]; }
         }
+
+        if (!image && images.length > 0) image = images[0];
+
 
         // Parse colors and sizes (handle potential string inputs from FormData)
         let parsedColors = [];
@@ -119,6 +136,7 @@ router.post('/', adminMiddleware, (req, res, next) => {
             description,
             category,
             image,
+            images,
             colors: parsedColors,
             sizes: parsedSizes,
             isFeatured: isFeatured === 'true' || isFeatured === true
@@ -129,6 +147,56 @@ router.post('/', adminMiddleware, (req, res, next) => {
     } catch (error) {
         console.error('Error creating product:', error);
         res.status(400).json({ message: 'Error creating product', error: error.message });
+    }
+});
+
+// PUT /api/products/:id - Update a product (Admin only)
+router.put('/:id', adminMiddleware, (req, res, next) => {
+    upload.array('images', 4)(req, res, (err) => {
+        if (err) {
+            console.error('Upload Error:', err);
+            return res.status(400).json({ message: 'Error uploading images', error: err.message });
+        }
+        next();
+    });
+}, async (req, res) => {
+    try {
+        const { name, price, description, category, isFeatured, colors, sizes } = req.body;
+
+        let updateData = {
+            name,
+            price,
+            description,
+            category,
+            isFeatured: isFeatured === 'true' || isFeatured === true
+        };
+
+        // Parse Arrays
+        try { if (colors) updateData.colors = typeof colors === 'string' ? JSON.parse(colors) : colors; } catch (e) { }
+        try { if (sizes) updateData.sizes = typeof sizes === 'string' ? JSON.parse(sizes) : sizes; } catch (e) { }
+
+        // Handle Image Updates
+        if (req.files && req.files.length > 0) {
+            const newImages = req.files.map(f => f.path);
+            updateData.images = newImages; // Replace with new images
+            updateData.image = newImages[0]; // Update primary
+        }
+
+        const updatedProduct = await Product.findByIdAndUpdate(
+            req.params.id,
+            updateData,
+            { new: true } // Return updated document
+        );
+
+        if (!updatedProduct) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        res.json(updatedProduct);
+
+    } catch (error) {
+        console.error('Error updating product:', error);
+        res.status(500).json({ message: 'Error updating product', error: error.message });
     }
 });
 

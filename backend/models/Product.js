@@ -17,8 +17,12 @@ const productSchema = new mongoose.Schema({
         required: true
     },
     image: {
-        type: String, // URL to image
+        type: String, // URL to image (Primary/Main image for backward compatibility)
         required: true
+    },
+    images: {
+        type: [String], // Array of image URLs (up to 4)
+        default: []
     },
     colors: {
         type: [String]

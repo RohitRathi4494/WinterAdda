@@ -30,12 +30,29 @@ document.addEventListener('DOMContentLoaded', async () => {
         const discount = Math.round(((mrp - p.price) / mrp) * 100);
 
         container.innerHTML = `
-            <div class="image-grid">
+            // Handle Images
+            let images = p.images && p.images.length > 0 ? p.images : [p.image];
+            
+            // Generate Thumbnails HTML
+            const thumbnailsHtml = images.length > 1 ? `
+            < div class="thumbnail-strip" >
+                ${
+                    images.map((img, index) => `
+                        <img src="${getImageUrl(img)}" 
+                             class="thumbnail ${index === 0 ? 'active' : ''}" 
+                             onclick="changeImage('${getImageUrl(img).replace(/'/g, "\\'")}', this)">
+                    `).join('')
+        }
+                </div >
+            ` : '';
+
+            container.innerHTML = `
+            < div class="image-gallery" >
                 <div class="main-image">
-                    <img src="${getImageUrl(p.image)}" alt="${p.name}" onerror="this.src='images/logo.png'">
+                    <img id="main-img" src="${getImageUrl(images[0])}" alt="${p.name}" onerror="this.src='images/logo.png'">
                 </div>
-                <!-- Placeholder for more images if array exists later -->
-            </div>
+                ${ thumbnailsHtml }
+            </div >
 
             <div class="product-details">
                 <h1 class="pdp-title">${p.name}</h1>
@@ -83,8 +100,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                         ${p.description || 'No additional details available.'}
                     </div>
                 </div>
-            </div>
-        `;
+            </div >
+            `;
 
         // Add event listeners for size selection
         document.querySelectorAll('.size-btn').forEach(btn => {
@@ -113,10 +130,10 @@ function renderSizes(sizes) {
         // Fallback or empty
         return '<span style="color:#666">One Size</span>';
     }
-    return sizes.map(s => `<button class="size-btn">${s}</button>`).join('');
+    return sizes.map(s => `< button class="size-btn" > ${ s }</button > `).join('');
 }
 
 function renderColors(colors) {
     if (!colors) return '';
-    return colors.map(c => `<span class="color-btn">${c}</span>`).join('');
+    return colors.map(c => `< span class="color-btn" > ${ c }</span > `).join('');
 }

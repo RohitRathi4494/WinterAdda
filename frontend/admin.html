@@ -108,8 +108,9 @@
         </div>
 
         <div class="product-form">
-            <h3>Add New Product</h3>
-            <form onsubmit="addProduct(event)">
+            <h3 id="form-title">Add New Product</h3>
+            <form onsubmit="saveProduct(event)">
+                <input type="hidden" id="p-id">
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Product Name</label>
@@ -143,16 +144,15 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Colors (Comma separated, e.g. Black, Red, Navy)</label>
+                        <label>Colors (Comma separated)</label>
                         <input type="text" id="p-colors" placeholder="Black, Blue, Red">
                     </div>
                     <div class="form-group">
-                        <label>Image</label>
-                        <!-- CHANGED: File input instead of text -->
-                        <input type="file" id="p-image-file" accept=".jpg, .jpeg, .png, .webp">
-                        <!-- Optional fallback if user wants to use URL -->
-                        <input type="text" id="p-image-url" placeholder="Or enter Image URL"
-                            style="margin-top:5px; display:none;">
+                        <label>Images (Max 4)</label>
+                        <!-- CHANGED: multiple and name='images' -->
+                        <input type="file" id="p-image-files" accept=".jpg, .jpeg, .png, .webp" multiple max="4">
+                        <small style="display:block; color:#666; margin-top:5px;">Select up to 4 images. First one is
+                            main.</small>
                     </div>
                 </div>
                 <div class="form-group">
@@ -164,7 +164,12 @@
                         <input type="checkbox" id="p-featured" style="width: auto;"> Featured on Homepage
                     </label>
                 </div>
-                <button type="submit" class="btn">Add Product</button>
+                <!-- Buttons -->
+                <div style="display:flex; gap:10px;">
+                    <button type="submit" class="btn" id="btn-save">Add Product</button>
+                    <button type="button" class="btn-delete" id="btn-cancel" style="display:none; background:#999;"
+                        onclick="resetForm()">Cancel Edit</button>
+                </div>
             </form>
         </div>
 
@@ -213,7 +218,10 @@
                             <span style="font-size:12px; color:#666">${p.category} - ₹${p.price} ${p.isFeatured ? '<span style="color:#c94e7b; font-weight:bold;">[Featured]</span>' : ''}</span>
                         </div>
                     </div>
-                    <button class="btn-delete" onclick="deleteProduct('${p._id}')">Delete</button>
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn" style="padding:5px 12px; font-size:12px;" onclick='editProduct(${JSON.stringify(p).replace(/'/g, "&#39;")})'>Edit</button>
+                        <button class="btn-delete" onclick="deleteProduct('${p._id}')">Delete</button>
+                    </div>
                 </div>
             `).join('');
             } catch (err) {
@@ -221,23 +229,65 @@
             }
         }
 
-        async function addProduct(e) {
+        function resetForm() {
+            document.getElementById('p-id').value = '';
+            document.getElementById('p-name').value = '';
+            document.getElementById('p-price').value = '';
+            document.getElementById('p-category').value = 'jackets';
+            document.getElementById('p-desc').value = '';
+            document.getElementById('p-colors').value = '';
+            document.getElementById('p-featured').checked = false;
+            document.getElementById('p-image-files').value = ''; // Reset file input
+
+            // Uncheck sizes
+            document.querySelectorAll('input[name="size"]').forEach(cb => cb.checked = false);
+
+            document.getElementById('form-title').innerText = 'Add New Product';
+            document.getElementById('btn-save').innerText = 'Add Product';
+            document.getElementById('btn-cancel').style.display = 'none';
+        }
+
+        function editProduct(product) {
+            document.getElementById('p-id').value = product._id;
+            document.getElementById('p-name').value = product.name;
+            document.getElementById('p-price').value = product.price;
+            document.getElementById('p-category').value = product.category;
+            document.getElementById('p-desc').value = product.description || '';
+            document.getElementById('p-featured').checked = product.isFeatured;
+            document.getElementById('p-colors').value = product.colors ? product.colors.join(', ') : '';
+
+            // Check sizes
+            document.querySelectorAll('input[name="size"]').forEach(cb => {
+                cb.checked = product.sizes && product.sizes.includes(cb.value);
+            });
+
+            document.getElementById('form-title').innerText = 'Edit Product';
+            document.getElementById('btn-save').innerText = 'Update Product';
+            document.getElementById('btn-cancel').style.display = 'inline-block';
+
+            // Scroll to form
+            document.querySelector('.product-form').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function saveProduct(e) {
             e.preventDefault();
 
+            const id = document.getElementById('p-id').value;
             const name = document.getElementById('p-name').value;
             const price = document.getElementById('p-price').value;
             const category = document.getElementById('p-category').value;
             const description = document.getElementById('p-desc').value;
             const isFeatured = document.getElementById('p-featured').checked;
-            const imageFile = document.getElementById('p-image-file').files[0];
+            const imageFiles = document.getElementById('p-image-files').files;
             const colorsInput = document.getElementById('p-colors').value;
 
             // Collect selected sizes
             const selectedSizes = Array.from(document.querySelectorAll('input[name="size"]:checked'))
                 .map(cb => cb.value);
 
-            if (!name || !price || !imageFile) {
-                alert('Please fill required fields (Name, Price, Image)');
+            // Validation: Image is required ONLY for NEW products
+            if (!id && imageFiles.length === 0) {
+                alert('Please select at least one image for new products.');
                 return;
             }
 
@@ -247,20 +297,27 @@
             formData.append('category', category);
             formData.append('description', description);
             formData.append('isFeatured', isFeatured);
-            formData.append('image', imageFile);
+
+            // Append Images
+            for (let i = 0; i < imageFiles.length; i++) {
+                formData.append('images', imageFiles[i]);
+            }
 
             // Send arrays as JSON strings
             formData.append('sizes', JSON.stringify(selectedSizes));
-
-            // Clean and split colors
             const colorsArray = colorsInput.split(',').map(c => c.trim()).filter(c => c !== "");
             formData.append('colors', JSON.stringify(colorsArray));
 
             const token = localStorage.getItem('token');
+            const isEdit = !!id;
+            const url = isEdit
+                ? `${API_URL.replace('/auth', '/products')}/${id}`
+                : `${API_URL.replace('/auth', '/products')}`;
+            const method = isEdit ? 'PUT' : 'POST';
 
             try {
-                const res = await fetch(`${API_URL.replace('/auth', '/products')}`, {
-                    method: 'POST',
+                const res = await fetch(url, {
+                    method: method,
                     headers: {
                         'Authorization': `Bearer ${token}`
                     },
@@ -268,23 +325,21 @@
                 });
 
                 if (res.ok) {
-                    alert('Product added!');
-                    e.target.reset();
+                    alert(isEdit ? 'Product Updated!' : 'Product Added!');
+                    resetForm();
                     loadProducts();
                 } else {
                     const text = await res.text();
                     try {
                         const d = JSON.parse(text);
-                        const msg = d.message && d.error ? `${d.message}: ${d.error}` : (d.message || d.error || 'Error adding product');
-                        alert(msg);
+                        alert(d.message || d.error || 'Error saving product');
                     } catch (e) {
-                        alert(`Server Error (${res.status}): ${text.substring(0, 100)}...`);
+                        alert(`Server Error: ${text}`);
                     }
                 }
             } catch (err) {
                 console.error(err);
-                const targetUrl = API_URL.replace('/auth', '/products');
-                alert(`Connection Error: Could not reach the server at ${targetUrl}. Please check if the backend is running or if the URL is correct.`);
+                alert(`Connection Error: ${err.message}`);
             }
         }
 
@@ -301,19 +356,11 @@
                 if (res.ok) {
                     loadProducts();
                 } else {
-                    const text = await res.text();
-                    try {
-                        const d = JSON.parse(text);
-                        const msg = d.message && d.error ? `${d.message}: ${d.error}` : (d.message || d.error || 'Error deleting');
-                        alert(msg);
-                    } catch (e) {
-                        alert(`Server Error (${res.status}): ${text.substring(0, 100)}...`);
-                    }
+                    alert('Error deleting product');
                 }
             } catch (err) {
                 console.error(err);
-                const targetUrl = `${API_URL.replace('/auth', '/products')}/${id}`;
-                alert(`Connection Error: Could not reach the server at ${targetUrl}.`);
+                alert('Connection Error');
             }
         }
 
