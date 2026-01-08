@@ -1,16 +1,20 @@
 // Add item to cart (localStorage)
-function addToCart(name, price, image) {
+function addToCart(name, price, image, color = '', size = '') {
   let cart = JSON.parse(localStorage.getItem("wa_cart")) || [];
 
-  const existingIndex = cart.findIndex(item => item.name === name);
+  // Check if exact same item (name, color, size) exists
+  const existingIndex = cart.findIndex(item =>
+    item.name === name && item.color === color && item.size === size
+  );
+
   if (existingIndex !== -1) {
     cart[existingIndex].qty += 1;
   } else {
-    cart.push({ image, name, price, qty: 1 });
+    cart.push({ image, name, price, color, size, qty: 1 });
   }
 
-  localStorage.setItem('cart', JSON.stringify(cart));
-  updateCartDisplay();  // This is called on cart.html
+  localStorage.setItem('wa_cart', JSON.stringify(cart));
+  alert(name + " added to cart");
 }
 
 // ===== WISHLIST FUNCTIONS =====
@@ -82,10 +86,17 @@ function loadCart() {
   cart.forEach((item, index) => {
     const itemTotal = item.price * item.qty;
     total += itemTotal;
+
+    // Display color and size if available
+    const colorDisplay = item.color ? item.color : '-';
+    const sizeDisplay = item.size ? item.size : '-';
+
     rows += `
       <tr>
         <td><img src="${item.image}" class="cart-img" alt="${item.name}"></td>
         <td>${item.name}</td>
+        <td>${colorDisplay}</td>
+        <td>${sizeDisplay}</td>
         <td>₹${item.price}</td>
         <td>${item.qty}</td>
         <td>₹${itemTotal}</td>

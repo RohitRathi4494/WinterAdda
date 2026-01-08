@@ -14,6 +14,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const p = await res.json();
 
+        // Store product info globally for cart function
+        currentProduct = {
+            name: p.name,
+            price: p.price,
+            image: images && images.length > 0 ? images[0] : p.image
+        };
+
         // Helper to resolve image URL
         function getImageUrl(path) {
             if (!path) return 'images/logo.png';
@@ -83,7 +90,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>` : ''}
 
                 <div class="pdp-actions">
-                    <button class="btn-bag" onclick="addToCart('${p.name.replace(/'/g, "\\'")}', ${p.price}, '${getImageUrl(images[0]).replaceAll('\\', '/')}')">
+                    <button class="btn-bag" onclick="addToCartWithOptions()">
                         <span style="margin-right:8px">🛍️</span> ADD TO BAG
                     </button>
                     <button class="btn-wishlist" onclick="addToWishlist('${p.name.replace(/'/g, "\\'")}', ${p.price}, '${getImageUrl(images[0]).replaceAll('\\', '/')}')">
@@ -139,4 +146,26 @@ function changeImage(src, thumbnail) {
     document.getElementById('main-img').src = src;
     document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
     thumbnail.classList.add('active');
+}
+
+// Global variables to store product info for adding to cart
+let currentProduct = null;
+
+// Function to add to cart with selected color and size
+function addToCartWithOptions() {
+    if (!currentProduct) {
+        alert('Product information not loaded');
+        return;
+    }
+
+    // Get selected size
+    const selectedSizeBtn = document.querySelector('.size-btn.selected');
+    const size = selectedSizeBtn ? selectedSizeBtn.textContent.trim() : '';
+
+    // Get selected color
+    const selectedColorBtn = document.querySelector('.color-btn.selected');
+    const color = selectedColorBtn ? selectedColorBtn.textContent.trim() : '';
+
+    // Add to cart with color and size
+    addToCart(currentProduct.name, currentProduct.price, currentProduct.image, color, size);
 }
