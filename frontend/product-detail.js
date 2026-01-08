@@ -14,13 +14,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const p = await res.json();
 
-        // Store product info globally for cart function
-        currentProduct = {
-            name: p.name,
-            price: p.price,
-            image: images && images.length > 0 ? images[0] : p.image
-        };
-
         // Helper to resolve image URL
         function getImageUrl(path) {
             if (!path) return 'images/logo.png';
@@ -38,6 +31,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Handle Images - MOVED OUTSIDE template literal
         let images = p.images && p.images.length > 0 ? p.images : [p.image];
+
+        // Store product info globally for cart function (AFTER images is defined)
+        currentProduct = {
+            name: p.name,
+            price: p.price,
+            image: getImageUrl(images[0])
+        };
 
         // Generate Thumbnails HTML
         const thumbnailsHtml = images.length > 1 ? `
