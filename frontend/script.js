@@ -87,8 +87,40 @@ function loadCart() {
     const itemTotal = item.price * item.qty;
     total += itemTotal;
 
-    // Display color and size if available
-    const colorDisplay = item.color ? item.color : '-';
+    // Color name to hex mapping (same as in product-detail.js)
+    const colorMap = {
+      'burgundy': '#800020',
+      'maroon': '#800000',
+      'dark brown': '#5C4033',
+      'brown': '#964B00',
+      'black': '#000000',
+      'white': '#FFFFFF',
+      'navy': '#000080',
+      'blue': '#0000FF',
+      'gray': '#808080',
+      'grey': '#808080',
+      'red': '#FF0000',
+      'green': '#008000',
+      'yellow': '#FFFF00',
+      'orange': '#FFA500',
+      'pink': '#FFC0CB',
+      'purple': '#800080',
+      'beige': '#F5F5DC',
+      'cream': '#FFFDD0',
+      'khaki': '#C3B091',
+      'olive': '#808000',
+      'tan': '#D2B48C'
+    };
+
+    // Display color as swatch if available
+    let colorDisplay = '-';
+    if (item.color) {
+      const colorName = item.color.toLowerCase().trim();
+      const hexColor = colorMap[colorName] || '#CCCCCC';
+      const borderStyle = colorName === 'white' ? 'border: 2px solid #ddd;' : '';
+      colorDisplay = `<span style="display: inline-block; width: 30px; height: 30px; border-radius: 50%; background-color: ${hexColor}; ${borderStyle} vertical-align: middle;" title="${item.color}"></span>`;
+    }
+
     const sizeDisplay = item.size ? item.size : '-';
 
     rows += `

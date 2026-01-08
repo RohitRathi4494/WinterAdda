@@ -201,6 +201,22 @@ function addToCartWithOptions() {
     const selectedColorBtn = document.querySelector('.color-btn.selected');
     const color = selectedColorBtn ? selectedColorBtn.getAttribute('data-color') : '';
 
+    // Check if product has sizes and validate selection
+    const hasSizes = document.querySelectorAll('.size-btn').length > 0;
+    const hasColors = document.querySelectorAll('.color-btn').length > 0;
+
+    // Validation: require size selection if sizes are available
+    if (hasSizes && !size) {
+        alert('Please select a size before adding to cart');
+        return;
+    }
+
+    // Validation: require color selection if colors are available
+    if (hasColors && !color) {
+        alert('Please select a color before adding to cart');
+        return;
+    }
+
     // Add to cart with color and size
     addToCart(currentProduct.name, currentProduct.price, currentProduct.image, color, size);
 }
