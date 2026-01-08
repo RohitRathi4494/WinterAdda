@@ -143,9 +143,24 @@
                         </div>
                     </div>
 
+
+                    <!-- Color Picker Section -->
                     <div class="form-group">
-                        <label>Colors (Comma separated)</label>
-                        <input type="text" id="p-colors" placeholder="Black, Blue, Red">
+                        <label>Product Colors (Pick Colors)</label>
+                        <div id="color-picker-container"
+                            style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                            <div class="color-input-wrapper" style="display: flex; gap: 5px; align-items: center;">
+                                <input type="color" class="color-picker-input" value="#000000"
+                                    style="width: 50px; height: 40px; border: 1px solid #ddd; cursor: pointer;">
+                                <button type="button" class="remove-color-btn" onclick="removeColorInput(this)"
+                                    style="display: none; padding: 5px 10px; background: #ff4444; color: white; border: none; border-radius: 4px; cursor: pointer;">✕</button>
+                            </div>
+                            <button type="button" onclick="addColorPicker()"
+                                style="padding: 8px 15px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">+
+                                Add Color</button>
+                        </div>
+                        <small style="color: #666; display: block; margin-top: 5px;">Click the color boxes to select
+                            colors for this product</small>
                     </div>
                     <div class="form-group">
                         <label>Images (Max 4)</label>
@@ -254,7 +269,9 @@
             document.getElementById('p-category').value = product.category;
             document.getElementById('p-desc').value = product.description || '';
             document.getElementById('p-featured').checked = product.isFeatured;
-            document.getElementById('p-colors').value = product.colors ? product.colors.join(', ') : '';
+
+            // Load colors into color pickers
+            loadColorsForEdit(product.colors || []);
 
             // Check sizes
             document.querySelectorAll('input[name="size"]').forEach(cb => {
@@ -273,17 +290,18 @@
             e.preventDefault();
 
             const id = document.getElementById('p-id').value;
-            const name = document.getElementById('p-name').value;
-            const price = document.getElementById('p-price').value;
-            const category = document.getElementById('p-category').value;
-            const description = document.getElementById('p-desc').value;
-            const isFeatured = document.getElementById('p-featured').checked;
             const imageFiles = document.getElementById('p-image-files').files;
-            const colorsInput = document.getElementById('p-colors').value;
 
-            // Collect selected sizes
-            const selectedSizes = Array.from(document.querySelectorAll('input[name="size"]:checked'))
-                .map(cb => cb.value);
+            const productData = {
+                name: document.getElementById('p-name').value,
+                price: parseFloat(document.getElementById('p-price').value) || 0,
+                category: document.getElementById('p-category').value,
+                description: document.getElementById('p-desc').value,
+                isFeatured: document.getElementById('p-featured').checked,
+                sizes: Array.from(document.querySelectorAll('input[name="size"]:checked')).map(cb => cb.value),
+                // Collect hex color codes from color pickers
+                colors: Array.from(document.querySelectorAll('.color-picker-input')).map(input => input.value)
+            };
 
             // Validation: Image is required ONLY for NEW products
             if (!id && imageFiles.length === 0) {
@@ -362,6 +380,74 @@
                 console.error(err);
                 alert('Connection Error');
             }
+        }
+
+        // Color Picker Helper Functions
+        function addColorPicker() {
+            const container = document.getElementById('color-picker-container');
+            const addButton = container.querySelector('button[onclick="addColorPicker()"]');
+
+            const newColorInput = document.createElement('div');
+            newColorInput.className = 'color-input-wrapper';
+            newColorInput.style.cssText = 'display: flex; gap: 5px; align-items: center;';
+            newColorInput.innerHTML = `
+                <input type="color" class="color-picker-input" value="#000000" style="width: 50px; height: 40px; border: 1px solid #ddd; cursor: pointer;">
+                <button type="button" class="remove-color-btn" onclick="removeColorInput(this)" style="padding: 5px 10px; background: #ff4444; color: white; border: none; border-radius: 4px; cursor: pointer;">✕</button>
+            `;
+
+            container.insertBefore(newColorInput, addButton);
+            updateRemoveButtons();
+        }
+
+        function removeColorInput(button) {
+            button.closest('.color-input-wrapper').remove();
+            updateRemoveButtons();
+        }
+
+        function updateRemoveButtons() {
+            const wrappers = document.querySelectorAll('.color-input-wrapper');
+            wrappers.forEach((wrapper, index) => {
+                const removeBtn = wrapper.querySelector('.remove-color-btn');
+                if (wrappers.length === 1) {
+                    removeBtn.style.display = 'none';
+                } else {
+                    removeBtn.style.display = 'inline-block';
+                }
+            });
+        }
+
+        function loadColorsForEdit(colors) {
+            const container = document.getElementById('color-picker-container');
+            const addButton = container.querySelector('button[onclick="addColorPicker()"]');
+
+            // Remove all existing color inputs
+            document.querySelectorAll('.color-input-wrapper').forEach(wrapper => wrapper.remove());
+
+            // Add color inputs for each stored color
+            if (colors && colors.length > 0) {
+                colors.forEach((hexColor, index) => {
+                    const newColorInput = document.createElement('div');
+                    newColorInput.className = 'color-input-wrapper';
+                    newColorInput.style.cssText = 'display: flex; gap: 5px; align-items: center;';
+                    newColorInput.innerHTML = `
+                        <input type="color" class="color-picker-input" value="${hexColor}" style="width: 50px; height: 40px; border: 1px solid #ddd; cursor: pointer;">
+                        <button type="button" class="remove-color-btn" onclick="removeColorInput(this)" style="padding: 5px 10px; background: #ff4444; color: white; border: none; border-radius: 4px; cursor: pointer;">✕</button>
+                    `;
+                    container.insertBefore(newColorInput, addButton);
+                });
+            } else {
+                // Add one default color picker if no colors
+                const newColorInput = document.createElement('div');
+                newColorInput.className = 'color-input-wrapper';
+                newColorInput.style.cssText = 'display: flex; gap: 5px; align-items: center;';
+                newColorInput.innerHTML = `
+                    <input type="color" class="color-picker-input" value="#000000" style="width: 50px; height: 40px; border: 1px solid #ddd; cursor: pointer;">
+                    <button type="button" class="remove-color-btn" onclick="removeColorInput(this)" style="display: none; padding: 5px 10px; background: #ff4444; color: white; border: none; border-radius: 4px; cursor: pointer;">✕</button>
+                `;
+                container.insertBefore(newColorInput, addButton);
+            }
+
+            updateRemoveButtons();
         }
 
         document.addEventListener('DOMContentLoaded', verifyAdmin);

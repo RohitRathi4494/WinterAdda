@@ -140,40 +140,15 @@ function renderSizes(sizes) {
 function renderColors(colors) {
     if (!colors) return '';
 
-    // Color name to hex mapping
-    const colorMap = {
-        'burgundy': '#800020',
-        'maroon': '#800000',
-        'dark brown': '#5C4033',
-        'brown': '#964B00',
-        'black': '#000000',
-        'white': '#FFFFFF',
-        'navy': '#000080',
-        'blue': '#0000FF',
-        'gray': '#808080',
-        'grey': '#808080',
-        'red': '#FF0000',
-        'green': '#008000',
-        'yellow': '#FFFF00',
-        'orange': '#FFA500',
-        'pink': '#FFC0CB',
-        'purple': '#800080',
-        'beige': '#F5F5DC',
-        'cream': '#FFFDD0',
-        'khaki': '#C3B091',
-        'olive': '#808000',
-        'tan': '#D2B48C'
-    };
-
     return colors.map(c => {
-        const colorName = c.toLowerCase().trim();
-        const hexColor = colorMap[colorName] || '#CCCCCC'; // Default gray if color not found
-        const borderStyle = colorName === 'white' ? 'border: 2px solid #ddd;' : '';
+        // Treat the color value as hex code directly
+        const hexColor = c;
+        const borderStyle = hexColor.toLowerCase() === '#ffffff' || hexColor.toLowerCase() === '#fff' ? 'border: 2px solid #ddd;' : '';
 
         return `<span class="color-btn" 
                      style="background-color: ${hexColor}; ${borderStyle}" 
-                     title="${c}"
-                     data-color="${c}"></span>`;
+                     title="${hexColor}"
+                     data-color="${hexColor}"></span>`;
     }).join('');
 }
 
