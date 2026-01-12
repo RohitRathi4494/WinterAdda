@@ -80,7 +80,7 @@ function updateAuthUI() {
             adminLink.href = 'admin.html';
             adminLink.textContent = 'Admin Panel';
             adminLink.className = 'auth-link';
-            adminLink.style.color = '#ff0080'; // Highlight admin link
+            adminLink.style.color = '#D15575'; // Highlight admin link
             nav.appendChild(adminLink);
         }
 

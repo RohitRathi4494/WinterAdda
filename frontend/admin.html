@@ -96,9 +96,13 @@
             <img src="images/logo.png" alt="Winter Adda Logo">
             <span>Winter Adda Admin</span>
         </div>
-        <nav>
+        <nav class="main-nav">
             <a href="index.html">Home</a>
             <a href="products.html">Products</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+            <a href="wishlist.html">Wishlist</a>
+            <a href="cart.html">Cart</a>
         </nav>
     </header>
 
@@ -197,14 +201,13 @@
     <script src="auth.js"></script>
     <script>
         // Helper to resolve image URL
+        // Helper to resolve image URL
         function getImageUrl(path) {
             if (!path) return 'images/logo.png';
             if (path.startsWith('http')) return path;
-            if (path.startsWith('uploads/')) {
-                const baseUrl = API_URL.replace('/api/auth', '');
-                return `${baseUrl}/${path.replace(/\\/g, '/')}`;
-            }
-            return path;
+            // Force local images for stability
+            const filename = path.split(/[/\\]/).pop();
+            return `images/${filename}`;
         }
 
         // Check Admin Role
