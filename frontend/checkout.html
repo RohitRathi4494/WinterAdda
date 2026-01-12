@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Checkout | Winter Adda</title>
@@ -7,125 +8,130 @@
   <link rel="stylesheet" href="styles.css">
   <script src="script.js"></script>
   <!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1357237699215052');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=1357237699215052&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
+  <script>
+    !function (f, b, e, v, n, t, s) {
+      if (f.fbq) return; n = f.fbq = function () {
+        n.callMethod ?
+        n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+      };
+      if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+      n.queue = []; t = b.createElement(e); t.async = !0;
+      t.src = v; s = b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t, s)
+    }(window, document, 'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1357237699215052');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1357237699215052&ev=PageView&noscript=1" /></noscript>
+  <!-- End Meta Pixel Code -->
 </head>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-LJQ91G8QES"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
+  function gtag() { dataLayer.push(arguments); }
   gtag('js', new Date());
 
   gtag('config', 'G-LJQ91G8QES');
 </script>
+
 <body onload="loadCheckoutSummary()">
 
-<header>
-  <div class="logo-area">
-    <img src="images/logo.png" alt="Winter Adda Logo">
-    <span>Winter Adda</span>
-  </div>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="products.html">Products</a>
-    <a href="cart.html">Cart</a>
-  </nav>
-</header>
+  <header>
+    <div class="logo-area">
+      <img src="images/logo.png" alt="Winter Adda Logo">
+      <span>Winter Adda</span>
+    </div>
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="wishlist.html">Wishlist</a>
+      <a href="cart.html">Cart</a>
+    </nav>
+  </header>
 
-<div class="container">
+  <div class="container">
 
-  <h1 class="section-title">Checkout</h1>
+    <h1 class="section-title">Checkout</h1>
 
-  <div class="checkout-grid">
+    <div class="checkout-grid">
 
-    <!-- LEFT: SHIPPING FORM -->
-    <div class="checkout-box">
-      <h3>Shipping Details</h3>
+      <!-- LEFT: SHIPPING FORM -->
+      <div class="checkout-box">
+        <h3>Shipping Details</h3>
 
-      <form id="checkout-form" name="checkout" method="POST" data-netlify="true">
+        <form id="checkout-form" name="checkout" method="POST" data-netlify="true">
 
-        <label>Full Name</label>
-        <input type="text" required>
+          <label>Full Name</label>
+          <input type="text" required>
 
-        <label>Email</label>
-        <input type="email" required>
+          <label>Email</label>
+          <input type="email" required>
 
-        <label>Phone Number</label>
-        <input type="tel" required>
+          <label>Phone Number</label>
+          <input type="tel" required>
 
-        <label>Address</label>
-        <textarea rows="3" required></textarea>
+          <label>Address</label>
+          <textarea rows="3" required></textarea>
 
-        <label>City</label>
-        <input type="text" required>
+          <label>City</label>
+          <input type="text" required>
 
-        <label>Pincode</label>
-        <input type="text" required>
+          <label>Pincode</label>
+          <input type="text" required>
 
-        <h3 style="margin-top:15px;">Payment Method</h3>
+          <h3 style="margin-top:15px;">Payment Method</h3>
 
-        <label class="radio-option">
-          <input type="radio" name="payment" value="cod" checked>
-          Cash on Delivery
-        </label>
+          <label class="radio-option">
+            <input type="radio" name="payment" value="cod" checked>
+            Cash on Delivery
+          </label>
 
-        <label class="radio-option">
-          <input type="radio" name="payment" value="online">
-          Online Payment (Coming Soon)
-        </label>
+          <label class="radio-option">
+            <input type="radio" name="payment" value="online">
+            Online Payment (Coming Soon)
+          </label>
 
-        <button type="button" class="btn" onclick="placeOrder()" style="margin-top:15px;">
-          Place Order
-        </button>
+          <button type="button" class="btn" onclick="placeOrder()" style="margin-top:15px;">
+            Place Order
+          </button>
 
-      </form>
+        </form>
+      </div>
+
+      <!-- RIGHT: ORDER SUMMARY -->
+      <div class="checkout-box">
+        <h3>Order Summary</h3>
+
+        <div id="checkout-items"></div>
+
+        <div class="summary-row">
+          <span>Subtotal:</span>
+          <span id="checkout-subtotal">₹0</span>
+        </div>
+
+        <div class="summary-row">
+          <span>Shipping:</span>
+          <span id="checkout-shipping">₹0</span>
+        </div>
+
+        <div class="summary-row total">
+          <span>Total:</span>
+          <span id="checkout-total">₹0</span>
+        </div>
+      </div>
+
     </div>
 
-    <!-- RIGHT: ORDER SUMMARY -->
-    <div class="checkout-box">
-      <h3>Order Summary</h3>
-
-      <div id="checkout-items"></div>
-
-      <div class="summary-row">
-        <span>Subtotal:</span>
-        <span id="checkout-subtotal">₹0</span>
-      </div>
-
-      <div class="summary-row">
-        <span>Shipping:</span>
-        <span id="checkout-shipping">₹0</span>
-      </div>
-
-      <div class="summary-row total">
-        <span>Total:</span>
-        <span id="checkout-total">₹0</span>
-      </div>
-    </div>
-
   </div>
 
-</div>
+  <footer>
+    © 2025 Winter Adda. All rights reserved.
+  </footer>
 
-<footer>
-  © 2025 Winter Adda. All rights reserved.
-</footer>
-
+  <script src="auth.js"></script>
 </body>
-</html>
-<script src="auth.js"></script>

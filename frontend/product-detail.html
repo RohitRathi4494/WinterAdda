@@ -16,14 +16,7 @@
         }
 
         /* Navbar tweaks */
-        header {
-            box-shadow: 0 4px 12px 0 rgba(0, 0, 0, .05);
-            border-bottom: none;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            background: #fff;
-        }
+        /* Header styles handled by styles.css */
 
         .pdp-container {
             max-width: 1200px;
@@ -79,7 +72,7 @@
 
         .thumbnail:hover,
         .thumbnail.active {
-            border-color: #ff3e6c;
+            border-color: #D15575;
             opacity: 1;
         }
 
@@ -174,13 +167,13 @@
         }
 
         .size-btn:hover {
-            border-color: #ff3e6c;
+            border-color: #D15575;
         }
 
         .size-btn.selected {
-            border-color: #ff3e6c;
-            color: #ff3e6c;
-            /* box-shadow: inset 0 0 0 1px #ff3e6c; */
+            border-color: #D15575;
+            color: #D15575;
+            /* box-shadow: inset 0 0 0 1px #D15575; */
         }
 
         .color-selector {
@@ -204,8 +197,8 @@
         }
 
         .color-btn.selected {
-            border-color: #ff3e6c;
-            box-shadow: 0 0 0 2px #fff, 0 0 0 4px #ff3e6c;
+            border-color: #D15575;
+            box-shadow: 0 0 0 2px #fff, 0 0 0 4px #D15575;
         }
 
         /* Actions */
@@ -219,7 +212,7 @@
 
         .btn-bag {
             flex: 2;
-            background-color: #ff3e6c;
+            background-color: #D15575;
             color: #fff;
             border: none;
             padding: 15px 0;
@@ -320,7 +313,8 @@
             <img src="images/logo.png" alt="Winter Adda Logo">
             <span>Winter Adda</span>
         </div>
-        <nav>
+
+        <nav class="main-nav">
             <a href="index.html">Home</a>
             <a href="products.html" class="active">Products</a>
             <a href="about.html">About</a>
