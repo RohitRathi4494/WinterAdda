@@ -48,7 +48,7 @@ header {
 /* Main Navigation */
 .main-nav {
   display: flex;
-  gap: 30px;
+  gap: 15px;
   align-items: center;
   flex-shrink: 0;
 }
@@ -68,10 +68,9 @@ header {
 }
 
 .main-nav a.active {
-  background-color: #D65A82;
-  /* Muted rose pink from image */
+  background-color: #FF3F6C;
   color: #fff !important;
-  padding: 8px 20px;
+  padding: 6px 16px;
   border-radius: 30px;
 }
 
