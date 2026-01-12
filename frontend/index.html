@@ -47,7 +47,8 @@
       <img src="images/logo.png" alt="Winter Adda Logo">
       <span>Winter Adda</span>
     </div>
-    <nav>
+
+    <nav class="main-nav">
       <a href="index.html" class="active">Home</a>
       <a href="products.html">Products</a>
       <a href="about.html">About</a>
@@ -75,32 +76,36 @@
     <h2 class="section-title">Shop by Category</h2>
     <p class="section-subtitle">Find your perfect winter wear in one click.</p>
 
-    <div class="category-buttons">
-
-      <a href="products.html?category=jackets" class="cat-btn">
-        Jackets
+    <div class="category-grid">
+      <a href="products.html?category=jackets" class="category-tile">
+        <img src="images/category_jackets.png" alt="Jackets">
+        <div class="category-tile-label">Jackets</div>
       </a>
 
-      <a href="products.html?category=hoodies" class="cat-btn">
-        Hoodies
+      <a href="products.html?category=hoodies" class="category-tile">
+        <img src="images/category_hoodies.png" alt="Hoodies">
+        <div class="category-tile-label">Hoodies</div>
       </a>
 
-      <a href="products.html?category=sweaters" class="cat-btn">
-        Sweaters
+      <a href="products.html?category=sweaters" class="category-tile">
+        <img src="images/category_sweaters.png" alt="Sweaters">
+        <div class="category-tile-label">Sweaters</div>
       </a>
 
-      <a href="products.html?category=thermals" class="cat-btn">
-        Thermals
+      <a href="products.html?category=thermals" class="category-tile">
+        <img src="images/category_thermals.png" alt="Thermals">
+        <div class="category-tile-label">Thermals</div>
       </a>
 
-      <a href="products.html?category=accessories" class="cat-btn">
-        Accessories
+      <a href="products.html?category=accessories" class="category-tile">
+        <img src="images/category_accessories.png" alt="Accessories">
+        <div class="category-tile-label">Accessories</div>
       </a>
 
-      <a href="products.html?category=boots" class="cat-btn">
-        Winter Boots
+      <a href="products.html?category=boots" class="category-tile">
+        <img src="images/category_boots.png" alt="Winter Boots">
+        <div class="category-tile-label">Winter Boots</div>
       </a>
-
     </div>
   </section>
 
@@ -160,7 +165,51 @@
 
 
   <footer>
-    © 2025 Winter Adda. All rights reserved.
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Online Shopping</h4>
+        <ul>
+          <li><a href="products.html?gender=men">Men</a></li>
+          <li><a href="products.html?gender=women">Women</a></li>
+          <li><a href="products.html?gender=kids">Kids</a></li>
+          <li><a href="products.html">All Products</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4>Customer Policies</h4>
+        <ul>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="#">FAQs</a></li>
+          <li><a href="#">Terms of Use</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4>Useful Links</h4>
+        <ul>
+          <li><a href="cart.html">Shopping Bag</a></li>
+          <li><a href="wishlist.html">Wishlist</a></li>
+          <li><a href="login.html">My Account</a></li>
+          <li><a href="#">Track Order</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4>Categories</h4>
+        <ul>
+          <li><a href="products.html?category=jackets">Jackets</a></li>
+          <li><a href="products.html?category=hoodies">Hoodies</a></li>
+          <li><a href="products.html?category=sweaters">Sweaters</a></li>
+          <li><a href="products.html?category=accessories">Accessories</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      © 2025 Winter Adda. All rights reserved.
+    </div>
   </footer>
 
   <script src="script.js"></script>
@@ -225,6 +274,7 @@
     document.addEventListener('DOMContentLoaded', loadFeaturedProducts);
 
   </script>
+  <script src="auth.js"></script>
 </body>
 
 </html>

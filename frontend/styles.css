@@ -63,9 +63,16 @@ header {
   transition: color 0.2s;
 }
 
-.main-nav a:hover,
-.main-nav a.active {
+.main-nav a:hover {
   color: #FF3F6C;
+}
+
+.main-nav a.active {
+  background-color: #D65A82;
+  /* Muted rose pink from image */
+  color: #fff !important;
+  padding: 8px 20px;
+  border-radius: 30px;
 }
 
 /* Search Bar */
