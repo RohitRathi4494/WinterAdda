@@ -68,7 +68,8 @@ header {
 }
 
 .main-nav a.active {
-  background-color: #FF3F6C;
+  background-color: #D15575;
+  /* Deep Rose from image */
   color: #fff !important;
   padding: 6px 16px;
   border-radius: 30px;
