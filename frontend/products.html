@@ -74,11 +74,9 @@
         function getImageUrl(path) {
           if (!path) return 'images/logo.png';
           if (path.startsWith('http')) return path;
-          if (path.startsWith('uploads/') || path.includes('\\')) {
-            const baseUrl = API_URL.replace('/api/auth', '');
-            return `${baseUrl}/${path.replace(/\\/g, '/')}`;
-          }
-          return path;
+          // Force local images for stability
+          const filename = path.split(/[/\\]/).pop();
+          return `images/${filename}`;
         }
 
         if (products.length === 0) {

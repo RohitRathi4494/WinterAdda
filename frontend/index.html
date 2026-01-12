@@ -238,12 +238,9 @@
         function getImageUrl(path) {
           if (!path) return 'images/logo.png';
           if (path.startsWith('http')) return path;
-          // For transition: handle old local uploads paths if they exist
-          if (path.startsWith('uploads/')) {
-            const baseUrl = API_URL.replace('/api/auth', '');
-            return `${baseUrl}/${path.replace(/\\/g, '/')}`;
-          }
-          return path;
+          // Force local images for stability
+          const filename = path.split(/[/\\]/).pop();
+          return `images/${filename}`;
         }
 
         if (products.length === 0) {
@@ -274,7 +271,7 @@
     document.addEventListener('DOMContentLoaded', loadFeaturedProducts);
 
   </script>
-  <script src="auth.js"></script>
+
 </body>
 
 </html>
