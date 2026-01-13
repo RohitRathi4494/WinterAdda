@@ -950,11 +950,28 @@ footer {
 /* Mobile Height Adjustment */
 @media (max-width: 768px) {
   .hero {
-    min-height: 50vh;
-    /* Reduce height on mobile to fit viewport better */
+    min-height: 40vh;
+    /* Further reduced to ~350px-400px */
+    padding: 30px 15px;
   }
 
   .hero h1 {
-    font-size: 32px;
+    font-size: 28px;
+  }
+
+  /* Two columns for products on mobile */
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  /* Adjust cards for smaller space */
+  .product-card {
+    padding: 10px;
+  }
+
+  .product-card img {
+    height: 180px;
+    /* Proportional height for smaller cards */
   }
 }
