@@ -821,3 +821,29 @@ footer {
   background: #d9325a;
   transform: translateY(-3px);
 }
+
+/* SINGLE ROW CATEGORIES - Force Layout */
+.category-grid {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto;
+  gap: 15px;
+  padding: 10px 0;
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE/Edge */
+}
+
+.category-grid::-webkit-scrollbar {
+  display: none;
+  /* Chrome/Safari */
+}
+
+.category-tile {
+  flex: 0 0 auto;
+  min-width: 180px;
+  /* Ensure suitable width */
+  display: block;
+  /* Ensure it behaves like a block */
+}
